@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch src/runner.py??",
+      "request": "launch",
+      "type": "debugpy",
+      "program": "src/runner.py",
+      "args": ["list", "sys/%", "svc/%"]
+    },
+    {
+      "name": "Launch dictum k.py",
+      "request": "launch",
+      "type": "debugpy",
+      "module": "dictum",
+      "args": ["run -s [app=hello-world-app]", "-C /bin/bash"]
+    },
+    {
+      "name": "Launch dictum types",
+      "request": "launch",
+      "type": "debugpy",
+      "module": "dictum",
+      "args": ["types"]
+    }
+  ]
+}
