@@ -6,13 +6,13 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 packages = [{ include = "kubeq" }]
 [tool.poetry.dependencies]
-python = "3.12.*"
+python = "3.13.*"
 pygments = "^2.19.1"
 termcolor = "^2.5.0"
 kubernetes = "^32.0.0"
 kr8s = "^0.20.3"
-reactivex = "^4.0.4"
 typeguard = "2.13.*"
+aioreactive = "^0.20.0"
 
 [tool.poetry.scripts]
 start = "kubeq.main:start"
