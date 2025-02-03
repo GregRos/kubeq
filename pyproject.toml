@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-
+packages = [{ include = "kubeq" }]
 [tool.poetry.dependencies]
 python = "3.12.*"
 pygments = "^2.19.1"
@@ -14,7 +14,8 @@ kr8s = "^0.20.3"
 reactivex = "^4.0.4"
 typeguard = "2.13.*"
 
-
+[tool.poetry.scripts]
+start = "kubeq.main:start"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

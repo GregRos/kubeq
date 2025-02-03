@@ -8,55 +8,55 @@ from typing import Callable, ClassVar, Literal, Protocol, TypeAlias
 _ops_by_symbol = {}
 
 
-class OpP[X](Protocol):
-    name: ClassVar[str]
-    symbol: ClassVar[str]
-    arg_type: ClassVar[type]
+class Op[X]:
+    def __init_subclass__(cls, name: str, symbol: str, arg_type: type) -> None:
+        cls.name = name
+        cls.symbol = symbol
+        cls.arg_type = arg_type
+        super().__init_subclass__()
 
-
-class OpImpl[X](OpP[X]):
     def __init__(self, value: X) -> None:
-        check_type("value", value, self.arg_type)
+        check_type(value, self.arg_type)
         self.value = value
 
 
-class EqOp(OpImpl[str], OpP[str]):
+class EqOp(Op[str], name="eq", symbol="=", arg_type=str):
     def __call__(self, what: str) -> bool:
         return what == self.value
 
 
-class NotEqOp(OpImpl[str]):
+class NotEqOp(Op[str], name="not eq", symbol="!=", arg_type=str):
 
     def __call__(self, what: str) -> bool:
         return what != self.value
 
 
-class InOp(OpImpl[list[str]], name="in", symbol=":", arg_type=list[str]):
+class InOp(Op[list[str]], name="in", symbol=":", arg_type=list[str]):
     def __call__(self, what: str) -> bool:
         return what in self.value
 
 
-class NotInOp(OpImpl[list[str]], name="not in", symbol="!:", arg_type=list[str]):
+class NotInOp(Op[list[str]], name="not in", symbol="!:", arg_type=list[str]):
     def __call__(self, what: str) -> bool:
         return what not in self.value
 
 
-class GlobOp(OpImpl[str], name="glob", symbol="~", type=str):
+class GlobOp(Op[str], name="glob", symbol="~", type=str):
     def __call__(self, what: str) -> bool:
         return fnmatch.fnmatch(what, self.value)
 
 
-class NotGlobOp(OpImpl[str], name="not glob", symbol="!~", arg_type=str):
+class NotGlobOp(Op[str], name="not glob", symbol="!~", arg_type=str):
     def __call__(self, what: str) -> bool:
         return not fnmatch.fnmatch(what, self.value)
 
 
-class RegexOp(OpImpl[str], name="regex", symbol="~~", arg_type=str):
+class RegexOp(Op[str], name="regex", symbol="~~", arg_type=str):
     def __call__(self, what: str) -> bool:
         return bool(re.match(self.value, what))
 
 
-class NotRegexOp(OpImpl[str], name="not regex", symbol="!~~", arg_type=str):
+class NotRegexOp(Op[str], name="not regex", symbol="!~~", arg_type=str):
     def __call__(self, what: str) -> bool:
         return not bool(re.match(self.value, what))
 
