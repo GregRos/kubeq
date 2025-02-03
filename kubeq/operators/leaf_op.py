@@ -21,3 +21,6 @@ class ValueOp(Op):
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.value == other.value
+
+    def __hash__(self) -> int:
+        return hash(self.value)

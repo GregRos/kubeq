@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar
+from typing import Callable, ClassVar, TypeGuard, TypeIs
 
 
 class Op(ABC):
     @abstractmethod
     def __call__(self, what: str) -> bool: ...
 
-    def is_op(self, t: "type[Op]") -> bool:
-        return isinstance(self, t)
+    @abstractmethod
+    def __eq__(self, other: object) -> bool: ...
+
+    @abstractmethod
+    def __hash__(self) -> int: ...

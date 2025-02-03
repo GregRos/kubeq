@@ -1,6 +1,5 @@
 from kr8s import Api
 from kr8s.objects import APIObject
-from kubeq.operators.operators import ApiOp
 from kubeq.attrs.attrs import Field, Label
 import aioreactive as rx
 

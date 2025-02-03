@@ -1,4 +1,10 @@
+from dataclasses import dataclass
 from kubeq.operators.core import Op
+
+
+@dataclass(eq=True)
+class PrimitiveOp(Op):
+    pass
 
 
 class Always(Op):
