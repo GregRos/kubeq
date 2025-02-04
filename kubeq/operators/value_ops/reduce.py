@@ -7,7 +7,7 @@ from .op_not_regexp import NotRegexOp
 from ..primitives.op_always import Always
 
 
-def reduce_pair(a: Op, b: Op) -> tuple[Op, Op]:
+def _reduce_pair(a: Op, b: Op) -> tuple[Op, Op]:
     match a, b:
         case InOp(v), InOp(u):
             return InOp(v & u), Always()
@@ -23,12 +23,16 @@ def reduce_pair(a: Op, b: Op) -> tuple[Op, Op]:
             return a, b
 
 
+def _strip_always(ops: list[Op]) -> list[Op]:
+    return [*filter(lambda x: not isinstance(x, Always), ops)]
+
+
 def reduce_ops_list(ops: list[Op]) -> list[Op]:
 
     i = 0
     j = 1
     for i in range(len(ops)):
         for j in range(i + 1, len(ops)):
-            ops[i], ops[j] = reduce_pair(ops[i], ops[j])
+            ops[i], ops[j] = _reduce_pair(ops[i], ops[j])
 
-    return [*filter(lambda x: not isinstance(x, Always), ops)]
+    return _strip_always(ops)

@@ -1,6 +1,8 @@
 import inspect
 import kubernetes
 
+from kubeq.utils.object import get_class_methods
+
 
 kubernetes.config.load_kube_config()
 

@@ -4,7 +4,6 @@ from .value_ops.op_glob import GlobOp
 from .value_ops.op_not_in import NotInOp
 from .value_ops.op_in import InOp
 from .value_ops.op_not_regexp import NotRegexOp
-from .kube_ops import Op
 from .boolean.op_and import And
 from .boolean.op_or import Or
 
