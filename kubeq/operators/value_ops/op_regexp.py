@@ -1,12 +1,12 @@
-from kubeq.operators.value_ops.op_glob import GlobOp
-from kubeq.operators.value_ops.op_value import ValueOp
+from kubeq.operators.value_ops.op_glob import op_Glob
+from kubeq.operators.value_ops.op_value import op_ValueOp
 
 
 import re
 
 
-class RegexOp(ValueOp, value_type=str):
-    original: GlobOp | None = None
+class op_Regex(op_ValueOp, value_type=str):
+    original: op_Glob | None = None
 
     def __call__(self, what: str) -> bool:
         return bool(re.match(self.value, what))

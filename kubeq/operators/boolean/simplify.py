@@ -1,13 +1,13 @@
-from kubeq.operators.boolean.op_and import And
-from kubeq.operators.boolean.op_or import Or
+from kubeq.operators.boolean.op_and import op_And
+from kubeq.operators.boolean.op_or import op_Or
 from kubeq.operators.op_base import Op
 
 
 def simplify_deep(parent: Op) -> Op:
 
     match parent:
-        case And(kids) | Or(kids):
-            cls = And if isinstance(parent, And) else Or
+        case op_And(kids) | op_Or(kids):
+            cls = op_And if isinstance(parent, op_And) else op_Or
             simplified = _simplify_kids(cls, kids)
             if len(simplified) == 1:
                 return simplified[0]
@@ -16,7 +16,7 @@ def simplify_deep(parent: Op) -> Op:
             return parent
 
 
-def _simplify_kids[X: And | Or](cls: type[X], kids: set[Op]) -> list[Op]:
+def _simplify_kids[X: op_And | op_Or](cls: type[X], kids: set[Op]) -> list[Op]:
     result_kids = []
     for kid in kids:
         simplified_kid = simplify_deep(kid)

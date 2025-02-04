@@ -1,4 +1,4 @@
-from kubeq.operators.boolean.op_or import Or
+from kubeq.operators.boolean.op_or import op_Or
 from kubeq.selection.attrs import Attr
 from kubeq.selection.formula import ApiObjectFilter
 
@@ -12,7 +12,7 @@ from dataclasses import dataclass
 @dataclass
 class Selector(ApiObjectFilter):
     attr: Attr
-    operator: Or
+    operator: op_Or
 
     def __call__(self, object: APIObject) -> bool:
         return self.operator(self.attr.get(object))

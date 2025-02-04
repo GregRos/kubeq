@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from typeguard import check_type
 
 
-from kubeq.operators.boolean.op_and import And
-from kubeq.operators.boolean.op_or import Or
+from kubeq.operators.boolean.op_and import op_And
+from kubeq.operators.boolean.op_or import op_Or
 from kubeq.operators.boolean.to_dnf import to_simplified_dnf
 from kubeq.selection.attrs import Attr
 from kubeq.selection.selector import Selector
@@ -20,14 +20,14 @@ class ApiObjectFilter(Protocol):
 
 @dataclass
 class SelectionFormula:
-    formula: dict[Attr, Or]
+    formula: dict[Attr, op_Or]
 
 
 def merge_selectors(selectors: list[Selector]):
     grouped = groupby(selectors, lambda s: s.attr)
-    formula: dict[Attr, Or] = {}
+    formula: dict[Attr, op_Or] = {}
     for attr, group in grouped:
         group = list(group)
-        merged_dnf = to_simplified_dnf(And(s.operator for s in group))
+        merged_dnf = to_simplified_dnf(op_And(s.operator for s in group))
         formula[attr] = merged_dnf
     return SelectionFormula(formula)

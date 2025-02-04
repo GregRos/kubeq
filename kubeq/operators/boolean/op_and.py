@@ -4,19 +4,19 @@ from kubeq.operators.op_base import Op
 from typing import Callable, Iterable
 
 
-class And(Op):
+class op_And(Op):
     __match_args__ = ("kids",)
     operands: set[Op]
 
     @staticmethod
-    def of(*operators: Op) -> "And":
-        return And(set(operators))
+    def of(*operators: Op) -> "op_And":
+        return op_And(set(operators))
 
     def __init__(self, operators: Iterable[Op]) -> None:
         self.operands = {
             x
             for op in operators
-            for x in (op.operands if isinstance(op, And) else [op])
+            for x in (op.operands if isinstance(op, op_And) else [op])
         }
 
     def __iter__(self):

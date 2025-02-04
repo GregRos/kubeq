@@ -5,14 +5,14 @@ from kubeq.operators.op_base import Op
 from typing import Callable, Iterable
 
 
-class Or(Op):
+class op_Or(Op):
     __match_args__ = ("kids",)
 
     operands: set[Op]
 
     @staticmethod
-    def of(*operators: Op) -> "Or":
-        return Or(set(operators))
+    def of(*operators: Op) -> "op_Or":
+        return op_Or(set(operators))
 
     def __init__(self, operators: Iterable[Op]) -> None:
         self.operands = set(operators)

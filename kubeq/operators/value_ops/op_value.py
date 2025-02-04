@@ -7,7 +7,7 @@ from typeguard import check_type
 from typing import Any
 
 
-class ValueOp(Op):
+class op_ValueOp(Op):
     __match_args__ = ("value",)
     value: Any
 

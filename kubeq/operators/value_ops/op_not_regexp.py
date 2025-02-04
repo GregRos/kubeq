@@ -1,12 +1,12 @@
-from kubeq.operators.value_ops.op_not_glob import NotGlobOp
-from kubeq.operators.value_ops.op_value import ValueOp
+from kubeq.operators.value_ops.op_not_glob import op_NotGlob
+from kubeq.operators.value_ops.op_value import op_ValueOp
 
 
 import re
 
 
-class NotRegexOp(ValueOp, value_type=str):
-    original: NotGlobOp | None = None
+class op_NotRegex(op_ValueOp, value_type=str):
+    original: op_NotGlob | None = None
 
     def __call__(self, what: str) -> bool:
         return not bool(re.match(self.value, what))

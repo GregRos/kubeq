@@ -1,5 +1,5 @@
-from kubeq.operators.boolean.op_and import And
-from kubeq.operators.boolean.op_or import Or
+from kubeq.operators.boolean.op_and import op_And
+from kubeq.operators.boolean.op_or import op_Or
 from kubeq.operators.boolean.simplify import simplify_deep
 from kubeq.operators.op_base import Op
 
@@ -7,13 +7,13 @@ from kubeq.operators.op_base import Op
 from itertools import product
 
 
-def _merge_and(a: Or, b: Or) -> Or:
-    return Or(And([x, y]) for x, y in product(a.operands, b.operands))
+def _merge_and(a: op_Or, b: op_Or) -> op_Or:
+    return op_Or(op_And([x, y]) for x, y in product(a.operands, b.operands))
 
 
-def _to_dnf(op: Op) -> Or:
-    if not isinstance(op, Or) and not isinstance(op, And):
-        return Or.of(op)
+def _to_dnf(op: Op) -> op_Or:
+    if not isinstance(op, op_Or) and not isinstance(op, op_And):
+        return op_Or.of(op)
     kids = list(op.operands)
     last = _to_dnf(kids[0])
     for kid in kids[1:]:
@@ -22,10 +22,10 @@ def _to_dnf(op: Op) -> Or:
     return last
 
 
-def to_simplified_dnf(op: Op) -> Or:
+def to_simplified_dnf(op: Op) -> op_Or:
     x = simplify_deep(_to_dnf(op))
     match x:
-        case Or():
+        case op_Or():
             return x
         case _:
-            return Or({x})
+            return op_Or({x})
