@@ -1,5 +1,4 @@
 from kubeq.operators.boolean.op_or import op_Or
-from kubeq.selection.attrs import Attr
 from kubeq.selection.formula import ApiObjectFilter
 
 

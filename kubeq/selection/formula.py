@@ -29,4 +29,4 @@ def merge_selectors(selectors: list[Selector]):
         group = list(group)
 
         formula[attr] = merged_dnf
-    return SelectionFormula(formula)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   return SelectionFormula(formula)
