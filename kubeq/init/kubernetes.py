@@ -1,7 +1,6 @@
 import inspect
 import kubernetes
 
-from dictum.utils import get_class_methods
 
 kubernetes.config.load_kube_config()
 

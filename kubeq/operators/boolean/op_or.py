@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from kubeq.operators.op_base import Op
 
 
@@ -27,6 +28,3 @@ class Or(Op):
 
     def __iter__(self):
         return iter(self.kids)
-
-    def map_kids(self, projection: Callable[[Op], Op]):
-        return Or({projection(op) for op in self.kids})

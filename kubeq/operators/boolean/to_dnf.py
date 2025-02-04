@@ -7,6 +7,10 @@ from kubeq.operators.op_base import Op
 from itertools import product
 
 
+def _merge_and(a: Or, b: Or) -> Or:
+    return Or(And([x, y]) for x, y in product(a.kids, b.kids))
+
+
 def _to_dnf(op: Op) -> Or:
     if not isinstance(op, Or) and not isinstance(op, And):
         return Or.of(op)
@@ -14,7 +18,7 @@ def _to_dnf(op: Op) -> Or:
     last = _to_dnf(kids[0])
     for kid in kids[1:]:
         normal_kid = _to_dnf(kid)
-        last = Or(And([x, y]) for x, y in product(last.kids, normal_kid.kids))
+        last = _merge_and(last, normal_kid)
     return last
 
 
