@@ -17,11 +17,11 @@ class op_Bool(Op, ABC):
     def __init__(self, operators: Iterable[Op]) -> None:
         self.operands = list(operators)
 
+    def __iter__(self):
+        return iter(self.operands)
+
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.operands == other.operands
 
     def __hash__(self) -> int:
         return hash(self.operands)
-
-    def simplify(self):
-        

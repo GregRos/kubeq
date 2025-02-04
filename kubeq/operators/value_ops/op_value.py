@@ -7,15 +7,15 @@ from typeguard import check_type
 from typing import Any
 
 
-class op_ValueOp(Op):
+class op_ValueOp[V](Op):
     __match_args__ = ("value",)
-    value: Any
+    value: V
 
-    def __init_subclass__(cls, value_type: type) -> None:
+    def __init_subclass__(cls, value_type: type[V]) -> None:
         cls.value_type = value_type
         return super().__init_subclass__()
 
-    def __init__(self, value: Any) -> None:
+    def __init__(self, value: V) -> None:
         check_type("value", value, self.value_type)
         self.value = value
 

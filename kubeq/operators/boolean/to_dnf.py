@@ -1,6 +1,6 @@
 from kubeq.operators.boolean.op_and import op_And
 from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.boolean.simplify import simplify_singletons
+from kubeq.operators.boolean.reductions.simplify_singletons import simplify_singletons
 from kubeq.operators.op_base import Op
 
 
@@ -8,7 +8,7 @@ from itertools import product
 
 
 def _merge_and(a: op_Or, b: op_Or) -> op_Or:
-    return op_Or(op_And([x, y]) for x, y in product(a.operands, b.operands))
+    
 
 
 def _to_dnf(op: Op) -> op_Or:

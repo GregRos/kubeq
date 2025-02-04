@@ -5,7 +5,7 @@ from kubeq.operators.value_ops.op_value import op_ValueOp
 import re
 
 
-class op_Regex(op_ValueOp, value_type=str):
+class op_Regex(op_ValueOp[str], value_type=str):
     original: op_Glob | None = None
 
     def __call__(self, what: str) -> bool:
