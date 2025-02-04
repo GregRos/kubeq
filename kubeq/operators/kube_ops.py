@@ -1,1 +1,1 @@
-from kubeq.operators.core import Op
+from kubeq.operators.op_base import Op

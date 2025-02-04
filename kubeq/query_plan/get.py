@@ -1,6 +1,7 @@
 from kr8s import Api
 from kr8s.objects import APIObject
-from kubeq.attrs.attrs import Field, Label
+from kubeq.selection.Label import Label
+from kubeq.selection.Field import Field
 import aioreactive as rx
 
 from kubeq.selection.selector import ApiSelector, Selector

@@ -1,10 +1,13 @@
-from kubeq.operators.boolean_ops import BooleanOp
-from .core import Op
-from .kubeq_ops import InOp, NotInOp, RegexOp, NotRegexOp
-from .primitive_ops import Always
+from kubeq.operators.boolean.boolean_ops import BooleanOp
+from .op_regexp import RegexOp
+from .op_not_in import NotInOp
+from .op_in import InOp
+from ..op_base import Op
+from .op_not_regexp import NotRegexOp
+from ..primitives.op_always import Always
 
 
-def op_intersection(a: Op, b: Op) -> tuple[Op, Op]:
+def reduce_pair(a: Op, b: Op) -> tuple[Op, Op]:
     match a, b:
         case InOp(v), InOp(u):
             return InOp(v & u), Always()
@@ -20,12 +23,12 @@ def op_intersection(a: Op, b: Op) -> tuple[Op, Op]:
             return a, b
 
 
-def intersect_ops_list(ops: list[Op]) -> list[Op]:
+def reduce_ops_list(ops: list[Op]) -> list[Op]:
 
     i = 0
     j = 1
     for i in range(len(ops)):
         for j in range(i + 1, len(ops)):
-            ops[i], ops[j] = op_intersection(ops[i], ops[j])
+            ops[i], ops[j] = reduce_pair(ops[i], ops[j])
 
     return [*filter(lambda x: not isinstance(x, Always), ops)]
