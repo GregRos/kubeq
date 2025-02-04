@@ -1,6 +1,6 @@
 from kubeq.operators.boolean.op_and import op_And
 from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.boolean.simplify import simplify_deep
+from kubeq.operators.boolean.simplify import simplify_singletons
 from kubeq.operators.op_base import Op
 
 
@@ -23,7 +23,7 @@ def _to_dnf(op: Op) -> op_Or:
 
 
 def to_simplified_dnf(op: Op) -> op_Or:
-    x = simplify_deep(_to_dnf(op))
+    x = simplify_singletons(_to_dnf(op))
     match x:
         case op_Or():
             return x
