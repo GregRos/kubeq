@@ -10,10 +10,6 @@ class op_Bool(Op, ABC):
 
     operands: list[Op]
 
-    @classmethod
-    def of(cls, *operators: Op) -> "Self":
-        return cls(set(operators))
-
     def __init__(self, operators: Iterable[Op]) -> None:
         self.operands = list(operators)
 

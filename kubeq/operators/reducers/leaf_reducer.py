@@ -6,16 +6,16 @@ from kubeq.operators.boolean.op_or import op_Or
 from kubeq.operators.op_base import Op
 from kubeq.operators.primitives.op_always import op_Always
 from kubeq.operators.reducers.base_reducer import BaseReducer
+from kubeq.operators.value_ops.kube_op_eq import kube_op_Eq
+from kubeq.operators.value_ops.kube_op_not_eq import kube_op_NotEq
 from kubeq.operators.value_ops.op_glob import op_Glob
 from kubeq.operators.value_ops.op_in import op_In
 from kubeq.operators.value_ops.op_not_glob import op_NotGlob
 from kubeq.operators.value_ops.op_not_in import op_NotIn
 from kubeq.operators.value_ops.op_not_regexp import op_NotRegex
 from kubeq.operators.value_ops.op_regexp import op_Regex
-from kubeq.operators.value_ops.simplify_trivial import simplify_trivial
 from kubeq.operators.primitives.op_never import op_Never
 from kubeq.operators.value_ops.op_value import op_ValueOp
-from kubeq.query_plan.kube_ops import op_Eq, op_NotEq
 
 
 class LeafReducer(BaseReducer):
@@ -41,7 +41,7 @@ class LeafReducer(BaseReducer):
     def _reduce_pair_or(self, a: Op, b: Op) -> tuple[Op, Op]:
         self.increment()
         match a, b:
-            case op_Eq(v), op_NotEq(u) if v == u:
+            case kube_op_Eq(v), kube_op_NotEq(u) if v == u:
                 return op_Always(), op_Never()
             case op_Or(kids1), op_Or(kids2):
                 return op_Or(set(kids1) | set(kids2)), op_Never()

@@ -9,7 +9,6 @@ from typeguard import check_type
 
 from kubeq.operators.boolean.op_and import op_And
 from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.boolean.to_dnf import to_simplified_dnf
 from kubeq.selection.attrs import Attr
 from kubeq.selection.selector import Selector
 
@@ -28,6 +27,6 @@ def merge_selectors(selectors: list[Selector]):
     formula: dict[Attr, op_Or] = {}
     for attr, group in grouped:
         group = list(group)
-        merged_dnf = to_simplified_dnf(op_And(s.operator for s in group))
+
         formula[attr] = merged_dnf
     return SelectionFormula(formula)
