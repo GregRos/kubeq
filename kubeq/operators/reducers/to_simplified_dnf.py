@@ -6,9 +6,11 @@ from kubeq.operators.reducers.leaf_reducer import LeafReducer
 from kubeq.operators.reducers.pruner import Pruner
 from kubeq.operators.reducers.simplifier import Simplifier
 from kubeq.operators.reducers.squash_reducer import SquashReducer
+from kubeq.attrs import attr_Any
+from kubeq.selection.selector import Selector
 
 
-def to_simplified_dnf(and_op: op_Any) -> op_Any:
+def to_simplified_dnf(selector: Selector) -> op_Any:
     leaf_reducer = LeafReducer()
     simplifier = Simplifier()
     pruner = Pruner()
