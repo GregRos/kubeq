@@ -10,7 +10,7 @@ import kubeq.attr
 from kubeq.selection.selector import Selector
 
 
-def to_simplified_dnf(selector: Selector) -> op_Any:
+def to_simplified_dnf(selector: Selector) -> Selector:
     attr = selector.attr
     leaf_reducer = LeafReducer(attr)
     simplifier = Simplifier(attr)
@@ -40,4 +40,4 @@ def to_simplified_dnf(selector: Selector) -> op_Any:
     op = simplifier.reduce(op)
     selector = selector.with_op(op)
     assert_dnf(selector)
-    return op
+    return selector
