@@ -1,5 +1,4 @@
 from re import M
-from kubeq.selection.formula import SelectionFormula
 
 fields_by_resource = {
     "Pod": [

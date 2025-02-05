@@ -11,7 +11,6 @@ from kubeq.operators.value_ops.op_not_glob import op_NotGlob
 from kubeq.operators.value_ops.op_not_in import op_NotIn
 from kubeq.operators.value_ops.op_not_regexp import op_NotRegex
 from kubeq.operators.value_ops.op_regexp import op_Regex
-from kubeq.operators.value_ops.simplify_trivial import simplify_trivial
 from kubeq.operators.primitives.op_never import op_Never
 from kubeq.operators.value_ops.op_value import op_ValueOp
 

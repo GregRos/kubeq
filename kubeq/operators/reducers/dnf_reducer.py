@@ -1,8 +1,9 @@
 from itertools import product
 from kubeq.operators.boolean.op_and import op_And
 from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.op_base import Op
+from kubeq.operators.op_base import op_Any
 from kubeq.operators.reducers.base_reducer import BaseReducer
+from kubeq.selection.selector import Selector
 
 
 class DnfReducer(BaseReducer):
@@ -19,7 +20,7 @@ class DnfReducer(BaseReducer):
             last = self._pair_reduce(last, reduced_kid)
         return last
 
-    def reduce(self, op: Op) -> op_Or:
+    def reduce(self, op: op_Any) -> op_Or:
         match op:
             case op_Or(kids):
                 reduced_kids = [self.reduce(kid) for kid in kids]
@@ -30,11 +31,13 @@ class DnfReducer(BaseReducer):
                 return op_Or.of(op)
 
 
-def get_dnf_reduction_count(op: Op) -> bool:
-    reducer = DnfReducer()
+def get_dnf_reduction_count(sel: Selector) -> int:
+    attr = sel.attr
+    op = sel.operator
+    reducer = DnfReducer(attr)
     reducer.reduce(op)
     return reducer.reductions
 
 
-def assert_dnf(op: Op):
-    count = get_dnf_reduction_count(op)
+def assert_dnf(s: Selector):
+    count = get_dnf_reduction_count(s)

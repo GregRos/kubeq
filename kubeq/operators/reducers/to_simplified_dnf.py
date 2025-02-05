@@ -6,18 +6,19 @@ from kubeq.operators.reducers.leaf_reducer import LeafReducer
 from kubeq.operators.reducers.pruner import Pruner
 from kubeq.operators.reducers.simplifier import Simplifier
 from kubeq.operators.reducers.squash_reducer import SquashReducer
-from kubeq.attrs import attr_Any
+import kubeq.attr
 from kubeq.selection.selector import Selector
 
 
 def to_simplified_dnf(selector: Selector) -> op_Any:
-    leaf_reducer = LeafReducer()
-    simplifier = Simplifier()
-    pruner = Pruner()
-    dnf_reducer = DnfReducer()
-    squasher = SquashReducer()
+    attr = selector.attr
+    leaf_reducer = LeafReducer(attr)
+    simplifier = Simplifier(attr)
+    pruner = Pruner(attr)
+    dnf_reducer = DnfReducer(attr)
+    squasher = SquashReducer(attr)
     # reduce leaves
-    op = leaf_reducer.reduce(and_op)
+    op = leaf_reducer.reduce(selector.operator)
     # simplify 1st time
     op = simplifier.reduce(op)
 
@@ -37,6 +38,6 @@ def to_simplified_dnf(selector: Selector) -> op_Any:
     op = pruner.reduce(op)
 
     op = simplifier.reduce(op)
-
-    assert_dnf(op)
+    selector = selector.with_op(op)
+    assert_dnf(selector)
     return op

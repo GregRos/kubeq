@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class attr_Label:
+class Label:
     __match_args__ = ["key"]
     name: str
 
@@ -13,7 +13,7 @@ class attr_Label:
         return object.labels.get(self.name)
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, attr_Label) and self.name == other.name
+        return isinstance(other, Label) and self.name == other.name
 
     def __hash__(self) -> int:
         return hash(self.name)

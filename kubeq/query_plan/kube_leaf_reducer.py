@@ -1,5 +1,5 @@
-from kubeq.attrs.field import attr_Field
-from kubeq.attrs.label import attr_Label
+from kubeq.attr.field import Field
+from kubeq.attr.label import Label
 from kubeq.operators.boolean.boolean_ops import op_Bool
 from kubeq.operators.boolean.op_or import op_Or
 from kubeq.operators.op_base import op_Any
@@ -12,13 +12,13 @@ from kubeq.operators.value_ops.op_not_glob import op_NotGlob
 from kubeq.operators.value_ops.op_not_in import op_NotIn
 from kubeq.operators.value_ops.op_not_regexp import op_NotRegex
 from kubeq.operators.value_ops.op_regexp import op_Regex
-from kubeq.attrs import attr_Any
+from kubeq import attr
 
 
 class KubeLeafReducer(BaseReducer):
-    def reduce(self, attr: attr_Any, op: op_Any) -> op_Any:
-        match attr, op:
-            case attr_Label(), op_In() | op_NotIn():
+    def reduce(self, op: op_Any) -> op_Any:
+        match self.attr, op:
+            case Label(), op_In() | op_NotIn():
                 # in, not in okay for labels
                 return op
             case _, op_In(kids):
@@ -31,6 +31,6 @@ class KubeLeafReducer(BaseReducer):
                 self.increment()
                 return op_Exists()
             case _, (op_Bool(kids) as r):
-                return r.__class__([self.reduce(attr, kid) for kid in kids])
+                return r.__class__([self.reduce(kid) for kid in kids])
             case _, r:
                 return r
