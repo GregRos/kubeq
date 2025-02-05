@@ -1,6 +1,6 @@
 from abc import ABC
 
-from kubeq.operators.op_base import op_Any
+from kubeq.operators.op_base import Op
 from kubeq import attr
 
 
@@ -16,4 +16,4 @@ class BaseReducer(ABC):
     def decrement(self):
         self.reductions -= 1
 
-    def reduce(self, op: op_Any) -> op_Any: ...
+    def reduce(self, op: Op) -> Op: ...

@@ -1,4 +1,4 @@
-from kubeq.operators.op_base import op_Any
+from kubeq.operators.op_base import Op
 
 
 from typeguard import check_type
@@ -7,7 +7,7 @@ from typeguard import check_type
 from typing import Any
 
 
-class op_ValueOp[V](op_Any):
+class ValueOp[V](Op):
     __match_args__ = ("value",)
     value: V
 
@@ -15,7 +15,7 @@ class op_ValueOp[V](op_Any):
         cls.value_type = value_type
         return super().__init_subclass__()
 
-    def __init__(self, value: V, *, original: "op_ValueOp | None" = None) -> None:
+    def __init__(self, value: V, *, original: "ValueOp | None" = None) -> None:
         check_type("value", value, self.value_type)
         self.value = value
         self.original = original

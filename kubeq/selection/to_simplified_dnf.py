@@ -1,6 +1,5 @@
-from kubeq.operators.boolean.op_and import op_And
-from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.op_base import op_Any
+import kubeq.operators as oprs
+
 from kubeq.operators.reducers.dnf_reducer import DnfReducer, assert_dnf
 from kubeq.operators.reducers.leaf_reducer import LeafReducer
 from kubeq.operators.reducers.pruner import Pruner

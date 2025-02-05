@@ -1,6 +1,6 @@
-from kubeq.operators.primitives.primitive_op import op_Primitive
+from kubeq.operators.primitives.primitive_op import Primitive
 
 
-class op_Exists(op_Primitive):
+class Exists(Primitive):
     def __call__(self, what: str) -> bool:
         return True

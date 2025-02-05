@@ -1,13 +1,13 @@
 from itertools import groupby, product
 from typing import Iterable
 from kubeq import attr
-from kubeq.operators.boolean.op_or import op_Or
+import kubeq.operators as oprs
 from kubeq.selection.selector import Selector
 from kubeq.selection_str.to_selector_str import to_selector_str
 
 
 def expand_selector(selector: Selector) -> Iterable[Selector]:
-    op = op_Or.of(selector.operator)
+    op = oprs.Or.of(selector.operator)
     for x in op.operands:
         yield Selector(selector.attr, x)
 

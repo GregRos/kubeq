@@ -1,17 +1,32 @@
 from abc import ABC
-from typing import Iterable, Self
-from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.boolean.op_and import op_And
-from kubeq.operators.op_base import op_Any
+from typing import Any, Iterable, Self, overload
+from kubeq.operators.boolean.op_or import Or
+from kubeq.operators.boolean.op_and import And
+from kubeq.operators.op_base import Op
 
 
-class op_Bool(op_Any, ABC):
+class Bool(Op, ABC):
     __match_args__ = ("operands",)
 
-    operands: list[op_Any]
+    operands: list[Op]
 
-    def __init__(self, operators: Iterable[op_Any]) -> None:
-        self.operands = list(operators)
+    @overload
+    def __init__(self, *operators: Op) -> None: ...
+
+    @overload
+    def __init__(self, operators: Iterable[Op], /) -> None: ...
+
+    def __init__(self, *args: Any) -> None:
+        match list(args):
+            case []:
+                self.operands = []
+            case [Op(), *_] as x:
+                self.operands = x
+            case [Iterable() as x]:
+                self.operands = list(x)
+            case _:
+                raise ValueError("Invalid arguments")
+        super().__init__()
 
     def __iter__(self):
         return iter(self.operands)
@@ -22,5 +37,5 @@ class op_Bool(op_Any, ABC):
     def __hash__(self) -> int:
         return hash(self.operands)
 
-    def normalize(self) -> op_Any:
+    def normalize(self) -> Op:
         return self

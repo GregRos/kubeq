@@ -1,7 +1,7 @@
-from kubeq.operators.op_base import op_Any
+from kubeq.operators.op_base import Op
 
 
-class op_Primitive(op_Any):
+class Primitive(Op):
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__)
@@ -9,5 +9,5 @@ class op_Primitive(op_Any):
     def __hash__(self) -> int:
         return hash(self.__class__)
 
-    def normalize(self) -> op_Any:
+    def normalize(self) -> Op:
         return self

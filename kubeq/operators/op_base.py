@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Callable, ClassVar, TypeGuard, TypeIs
 
 
-class op_Any(ABC):
+class Op(ABC):
     @abstractmethod
     def __call__(self, what: str) -> bool: ...
 
@@ -13,4 +13,14 @@ class op_Any(ABC):
     def __hash__(self) -> int: ...
 
     @abstractmethod
-    def normalize(self) -> "op_Any": ...
+    def normalize(self) -> "Op": ...
+
+    def and_(self, *others: "Op"):
+        from kubeq.operators.boolean.op_and import And
+
+        return And([self, *others])
+
+    def or_(self, *others: "Op"):
+        from kubeq.operators.boolean.op_or import Or
+
+        return Or([self, *others])

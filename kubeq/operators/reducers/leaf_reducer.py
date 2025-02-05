@@ -1,28 +1,28 @@
 from itertools import product
 from typing import Callable
-from kubeq.operators.boolean.boolean_ops import op_Bool
-from kubeq.operators.boolean.op_and import op_And
-from kubeq.operators.boolean.op_or import op_Or
-from kubeq.operators.op_base import op_Any
-from kubeq.operators.primitives.op_always import op_Always
-from kubeq.operators.primitives.op_exists import op_Exists
-from kubeq.operators.primitives.op_missing import op_Missing
+from kubeq.operators.boolean.boolean_ops import Bool
+from kubeq.operators.boolean.op_and import And
+from kubeq.operators.boolean.op_or import Or
+from kubeq.operators.op_base import Op
+from kubeq.operators.primitives.op_always import Always
+from kubeq.operators.primitives.op_exists import Exists
+from kubeq.operators.primitives.op_missing import Missing
 from kubeq.operators.reducers.base_reducer import BaseReducer
-from kubeq.operators.value_ops.kube_op_eq import op_Eq
-from kubeq.operators.value_ops.kube_op_not_eq import op_NotEq
-from kubeq.operators.value_ops.op_glob import op_Glob
-from kubeq.operators.value_ops.op_in import op_In
-from kubeq.operators.value_ops.op_not_glob import op_NotGlob
-from kubeq.operators.value_ops.op_not_in import op_NotIn
-from kubeq.operators.value_ops.op_not_regexp import op_NotRegex
-from kubeq.operators.value_ops.op_regexp import op_Regex
-from kubeq.operators.primitives.op_never import op_Never
-from kubeq.operators.value_ops.op_value import op_ValueOp
+from kubeq.operators.value_ops.kube_op_eq import Eq
+from kubeq.operators.value_ops.kube_op_not_eq import NotEq
+from kubeq.operators.value_ops.op_glob import Glob
+from kubeq.operators.value_ops.op_in import In
+from kubeq.operators.value_ops.op_not_glob import NotGlob
+from kubeq.operators.value_ops.op_not_in import NotIn
+from kubeq.operators.value_ops.op_not_regexp import NotRegex
+from kubeq.operators.value_ops.op_regexp import Regex
+from kubeq.operators.primitives.op_never import Never
+from kubeq.operators.value_ops.op_value import ValueOp
 
 
 class LeafReducer(BaseReducer):
 
-    def _reduce_pair_and(self, a: op_Any, b: op_Any) -> tuple[op_Any, op_Any]:
+    def _reduce_pair_and(self, a: Op, b: Op) -> tuple[Op, Op]:
         self.increment()
         a = a.normalize()
         b = b.normalize()
@@ -30,48 +30,48 @@ class LeafReducer(BaseReducer):
             # MISSING & NOTIN -> MISSING
             # MISSING & NOTREGEX -> MISSING
             # Reason: MISSING is like a NOTREGEX(/.*/) or NOTIN(all) so it's a subset of both
-            case (op_Missing(), (op_NotIn() | op_NotRegex())) | (
-                ((op_NotIn() | op_NotRegex()), op_Missing()),
+            case (Missing(), (NotIn() | NotRegex())) | (
+                ((NotIn() | NotRegex()), Missing()),
             ):
-                return op_Missing(), op_Always()
+                return Missing(), Always()
             # EXISTS & IN -> IN
             # EXISTS & REGEX -> REGEX
             # Reason: EXISTS is like a REGEX(/.*/) or IN(all) so it's a superset of both
-            case (op_Exists(), (op_In() | op_Regex()) as r) | (
-                (op_In() | op_Regex()) as r,
-                op_Exists(),
+            case (Exists(), (In() | Regex()) as r) | (
+                (In() | Regex()) as r,
+                Exists(),
             ):
-                return r, op_Always()
+                return r, Always()
             # This squashes two neighboring And clauses
             # Most of the squashing happens in a different reduction but we do it here for this case
-            case op_And(kids1), op_And(kids2):
-                return op_And(set(kids1) | set(kids2)), op_Always()
+            case And(kids1), And(kids2):
+                return And(set(kids1) | set(kids2)), Always()
 
             # IN(u) & IN(v) -> IN(u & v)
             # Reason: Value must be in both
-            case op_In(v), op_In(u):
-                return op_In(v & u), op_Always()
+            case In(v), In(u):
+                return In(v & u), Always()
             # NOTIN(u) & NOTIN(v) -> NOTIN(u | v)
             # Reason: Value must not be in either
-            case op_NotIn(u), op_NotIn(v):
-                return op_NotIn(u | v), op_Always()
+            case NotIn(u), NotIn(v):
+                return NotIn(u | v), Always()
             # IN(us) & NOTIN(vs) -> IN(us - vs)
             # Reason: Value must be in us and not in vs
-            case (op_In(u), op_NotIn(v)) | (op_NotIn(v), op_In(u)):
-                return op_In(u - v), op_Always()
+            case (In(u), NotIn(v)) | (NotIn(v), In(u)):
+                return In(u - v), Always()
             # IN(us) & REGEX(/r/) -> IN(us filtered by /r/)
             # Reason: Value must be in us and match /r/
-            case (op_In(v), op_Regex() as r) | (
-                op_Regex() as r,
-                op_In(v),
+            case (In(v), Regex() as r) | (
+                Regex() as r,
+                In(v),
             ):
-                return op_In({u for u in v if r(u)}), op_Always()
+                return In({u for u in v if r(u)}), Always()
 
             case a, b:
                 self.decrement()
                 return a, b
 
-    def _reduce_pair_or(self, a: op_Any, b: op_Any) -> tuple[op_Any, op_Any]:
+    def _reduce_pair_or(self, a: Op, b: Op) -> tuple[Op, Op]:
         self.increment()
         a = a.normalize()
         b = b.normalize()
@@ -79,42 +79,42 @@ class LeafReducer(BaseReducer):
             # MISSING | NOTIN -> NOTIN
             # MISSING | NOTREGEX -> NOTREGEX
             # Reason: MISSING is like NOTREGEX(/.*/) or NOTIN(all) so it's a subset of both
-            case op_Missing(), (op_NotIn() | op_NotRegex() as r) | (
-                (op_NotIn() | op_NotRegex()) as r,
-                op_Missing(),
+            case Missing(), (NotIn() | NotRegex() as r) | (
+                (NotIn() | NotRegex()) as r,
+                Missing(),
             ):
-                return r, op_Always()
+                return r, Always()
             # EXISTS | IN -> EXISTS
             # EXISTS | REGEX -> EXISTS
             # Reason: EXISTS is like a REGEX(/.*/) or IN(all) so it's a superset of both
-            case (op_Exists(), (op_In() | op_Regex())) | (
-                (op_In() | op_Regex()),
-                op_Exists(),
+            case (Exists(), (In() | Regex())) | (
+                (In() | Regex()),
+                Exists(),
             ):
-                return op_Exists(), op_Always()
+                return Exists(), Always()
             # Squash OR nodes
-            case op_Or(kids1), op_Or(kids2):
-                return op_Or(set(kids1) | set(kids2)), op_Never()
+            case Or(kids1), Or(kids2):
+                return Or(set(kids1) | set(kids2)), Never()
             # IN(u) | IN(v) -> IN(u | v)
             # Reason: Value must be in either
-            case op_In(v), op_In(u):
-                return op_In(v | u), op_Never()
+            case In(v), In(u):
+                return In(v | u), Never()
             # NOTIN(u) | NOTIN(v) -> NOTIN(u & v)
             # Reason: Value must not be in both
-            case op_NotIn(u), op_NotIn(v):
-                return op_NotIn(u & v), op_Never()
+            case NotIn(u), NotIn(v):
+                return NotIn(u & v), Never()
             #
             # IN(us) | NOTIN(vs) -> NOTIN(vs - us)
             # Reason: Value should either not be in vs or be in us
             # It allows some values in vs as an alternative
-            case (op_NotIn(u), op_In(v)) | (op_In(v), op_NotIn(u)):
-                return op_NotIn(u - v), op_Never()
+            case (NotIn(u), In(v)) | (In(v), NotIn(u)):
+                return NotIn(u - v), Never()
 
-            case (op_NotIn(u), op_NotRegex() as r) | (
-                op_NotRegex() as r,
-                op_NotIn(u),
+            case (NotIn(u), NotRegex() as r) | (
+                NotRegex() as r,
+                NotIn(u),
             ):
-                return op_NotIn({v for v in u if not r(v)}), op_Never()
+                return NotIn({v for v in u if not r(v)}), Never()
 
             case a, b:
                 self.decrement()
@@ -122,8 +122,8 @@ class LeafReducer(BaseReducer):
 
     def _apply_pair_reduction(
         self,
-        ops: list[op_Any],
-        pair_reduction: Callable[[op_Any, op_Any], tuple[op_Any, op_Any]],
+        ops: list[Op],
+        pair_reduction: Callable[[Op, Op], tuple[Op, Op]],
     ):
 
         i = 0
@@ -132,14 +132,14 @@ class LeafReducer(BaseReducer):
             for j in range(i + 1, len(ops)):
                 ops[i], ops[j] = pair_reduction(ops[i], ops[j])
 
-    def reduce(self, op: op_Any) -> op_Any:
+    def reduce(self, op: Op) -> Op:
         match op:
-            case op_And(kids):
+            case And(kids):
                 kids = [self.reduce(kid) for kid in kids]
                 self._apply_pair_reduction(kids, self._reduce_pair_and)
-                return op_And(kids)
-            case op_Or(kids):
+                return And(kids)
+            case Or(kids):
                 self._apply_pair_reduction(kids, self._reduce_pair_or)
-                return op_And(kids)
+                return And(kids)
             case _:
                 return op
