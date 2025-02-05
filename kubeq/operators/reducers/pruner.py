@@ -1,6 +1,7 @@
 from kubeq.operators.boolean.op_and import op_And
 from kubeq.operators.boolean.op_or import op_Or
 from kubeq.operators.op_base import op_Any
+from kubeq.operators.primitives.op_always import op_Always
 from kubeq.operators.primitives.op_exists import op_Exists
 from kubeq.operators.primitives.op_never import op_Never
 from kubeq.operators.reducers.base_reducer import BaseReducer
@@ -12,13 +13,14 @@ class Pruner(BaseReducer):
         pruned = []
         for kid in op:
             match kid:
-                case op_Exists():
+                case op_Always():
                     self.increment()
                     continue
                 case op_Never():
                     self.increment()
                     return op_Never()
                 case op_And(kids):
+                    self.increment()
                     pruned.extend([self.reduce(kid) for kid in kids])
                 case _:
                     pruned.append(self.reduce(kid))
@@ -31,10 +33,11 @@ class Pruner(BaseReducer):
                 case op_Never():
                     self.increment()
                     continue
-                case op_Exists():
+                case op_Always():
                     self.increment()
-                    return op_Exists()
+                    return op_Always()
                 case op_Or(kids):
+                    self.increment()
                     pruned.extend([self.reduce(kid) for kid in kids])
                 case _:
                     pruned.append(self.reduce(kid))

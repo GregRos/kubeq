@@ -15,9 +15,10 @@ class op_ValueOp[V](op_Any):
         cls.value_type = value_type
         return super().__init_subclass__()
 
-    def __init__(self, value: V) -> None:
+    def __init__(self, value: V, *, original: "op_ValueOp | None" = None) -> None:
         check_type("value", value, self.value_type)
         self.value = value
+        self.original = original
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.value == other.value

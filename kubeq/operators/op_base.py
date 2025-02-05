@@ -11,3 +11,6 @@ class op_Any(ABC):
 
     @abstractmethod
     def __hash__(self) -> int: ...
+
+    @abstractmethod
+    def normalize(self) -> "op_Any": ...

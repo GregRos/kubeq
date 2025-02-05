@@ -8,3 +8,6 @@ class op_Primitive(op_Any):
 
     def __hash__(self) -> int:
         return hash(self.__class__)
+
+    def normalize(self) -> op_Any:
+        return self

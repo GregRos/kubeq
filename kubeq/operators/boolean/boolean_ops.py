@@ -21,3 +21,6 @@ class op_Bool(op_Any, ABC):
 
     def __hash__(self) -> int:
         return hash(self.operands)
+
+    def normalize(self) -> op_Any:
+        return self
