@@ -1,5 +1,5 @@
 from kubeq.operators.boolean.boolean_ops import op_Bool
-from kubeq.operators.op_base import Op
+from kubeq.operators.op_base import op_Any
 
 
 from typing import Callable, Iterable
@@ -8,7 +8,7 @@ from typing import Callable, Iterable
 class op_And(op_Bool):
 
     @classmethod
-    def of(cls, *operators: Op) -> "op_And":
+    def of(cls, *operators: op_Any) -> "op_And":
         match operators:
             case (op_And() as r,):
                 return r

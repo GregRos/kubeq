@@ -1,4 +1,4 @@
-from kubeq.operators.op_base import Op
+from kubeq.operators.op_base import op_Any
 
 
 from typeguard import check_type
@@ -7,7 +7,7 @@ from typeguard import check_type
 from typing import Any
 
 
-class op_ValueOp[V](Op):
+class op_ValueOp[V](op_Any):
     __match_args__ = ("value",)
     value: V
 

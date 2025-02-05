@@ -1,7 +1,7 @@
-from kubeq.operators.op_base import Op
+from kubeq.operators.op_base import op_Any
 
 
-class PrimitiveOp(Op):
+class op_Primitive(op_Any):
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__)

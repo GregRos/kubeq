@@ -28,3 +28,13 @@ class DnfReducer(BaseReducer):
                 return self._and_reduce(op)
             case _:
                 return op_Or.of(op)
+
+
+def get_dnf_reduction_count(op: Op) -> bool:
+    reducer = DnfReducer()
+    reducer.reduce(op)
+    return reducer.reductions
+
+
+def assert_dnf(op: Op):
+    count = get_dnf_reduction_count(op)

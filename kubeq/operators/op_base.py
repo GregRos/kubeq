@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Callable, ClassVar, TypeGuard, TypeIs
 
 
-class Op(ABC):
+class op_Any(ABC):
     @abstractmethod
     def __call__(self, what: str) -> bool: ...
 
