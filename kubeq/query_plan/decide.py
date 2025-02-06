@@ -1,3 +1,6 @@
-from kubeq import query as q
+from kubeq.query import *
 
-q.red.BaseReducer
+
+def decide(selectors: list[Selector]):
+    squashed = SelectionFormula.squash(selectors)
+    kind_operator = squashed[attr.Kind()]

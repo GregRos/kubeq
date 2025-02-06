@@ -1,10 +1,10 @@
 from itertools import product
 from typing import Iterable
 from kubeq.query._operators import *
-from kubeq.query._reducers._base_reducer import BaseReducer
+from kubeq.query._reductions._base_reduction import BaseReduction
 
 
-class To_Messy_Dnf(BaseReducer):
+class To_Messy_Dnf(BaseReduction):
 
     def _pair_reduce(self, a: Or, b: Or):
         x = [And([x, y]) for x, y in product(a.operands, b.operands)]

@@ -1,9 +1,9 @@
 from ast import NotEq, NotIn
 from kubeq.query._operators import *
-from ._base_reducer import BaseReducer
+from ...query._reductions._base_reduction import BaseReduction
 
 
-class To_Finite_Set(BaseReducer):
+class To_Finite_Set(BaseReduction):
 
     def _reduce_and(self, op: And):
         result = set()

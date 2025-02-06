@@ -1,8 +1,8 @@
 from kubeq.query import *
-from kubeq.query._reducers._base_reducer import BaseReducer
+from kubeq.query._reductions._base_reduction import BaseReduction
 
 
-class KubeLeafReducer(BaseReducer):
+class To_Kube_Api_Supported(BaseReduction):
     def __init__(self, attr: attr.Any):
         self.attr = attr
         super().__init__()
@@ -38,3 +38,7 @@ class KubeLeafReducer(BaseReducer):
                 raise ValueError("Or should not be here")
             case _, r:
                 return r
+
+
+def to_kube_api_supported(x: oprs.Op, attr: attr.Any) -> oprs.Op:
+    return To_Kube_Api_Supported(attr).reduce(x)

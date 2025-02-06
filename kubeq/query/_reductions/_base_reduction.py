@@ -3,7 +3,7 @@ from abc import ABC
 from kubeq.query._operators import *
 
 
-class BaseReducer(ABC):
+class BaseReduction(ABC):
     reductions = 0
 
     def increment(self):

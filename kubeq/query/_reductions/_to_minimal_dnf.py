@@ -1,13 +1,13 @@
 from kubeq.query._utils.render_op import print_operator
 from kubeq.query._operators import *
-from ._base_reducer import BaseReducer
+from ._base_reduction import BaseReduction
 from ._to_messy_dnf import To_Messy_Dnf, assert_dnf
 from ._squash_leaf_ops import Squash_Leaf_Ops
 from ._prune_squash_bools import Prune_Squash_Bools
 from ._nullary_terms_to_prims import Nullary_Terms_To_Prims
 
 
-class To_Minimal_Dnf(BaseReducer):
+class To_Minimal_Dnf(BaseReduction):
 
     def __init__(self, max_iterations: int = 10, normalize_operators: bool = True):
         self.max_iterations = max_iterations

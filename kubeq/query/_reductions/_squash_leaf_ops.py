@@ -1,10 +1,10 @@
 from itertools import product
 from typing import Callable
 from kubeq.query._operators import *
-from ._base_reducer import BaseReducer
+from ._base_reduction import BaseReduction
 
 
-class Squash_Leaf_Ops(BaseReducer):
+class Squash_Leaf_Ops(BaseReduction):
 
     def __init__(self, *, normalize_operators=True):
         self.normalize_operators = normalize_operators
