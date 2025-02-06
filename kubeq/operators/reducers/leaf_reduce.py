@@ -83,6 +83,6 @@ class LeafReducer:
                 return And(kids)
             case Or(kids):
                 self._apply_pair_reduction(kids, self._reduce_pair_or)
-                return And(kids)
+                return Or(kids)
             case _:
                 return op

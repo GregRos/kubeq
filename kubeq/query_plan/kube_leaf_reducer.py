@@ -7,6 +7,10 @@ from kubeq import attr
 
 
 class KubeLeafReducer(BaseReducer):
+    def __init__(self, attr: attr.Any):
+        self.attr = attr
+        super().__init__()
+
     def reduce(self, op: oprs.Op) -> oprs.Op:
         match self.attr, op:
             case Label(), oprs.In() | oprs.NotIn() | oprs.Missing() | oprs.Exists():

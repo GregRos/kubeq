@@ -11,7 +11,7 @@ from kubeq.operators.value_ops.op_in import In
 from kubeq.operators.value_ops.op_not_in import NotIn
 
 
-class Simplifier(BaseReducer):
+class Reduced_Nullary_Terms_To_Prims(BaseReducer):
 
     def reduce(self, op: Op) -> Op:
 

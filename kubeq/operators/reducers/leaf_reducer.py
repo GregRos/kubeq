@@ -139,7 +139,8 @@ class LeafReducer(BaseReducer):
                 self._apply_pair_reduction(kids, self._reduce_pair_and)
                 return And(kids)
             case Or(kids):
+                kids = [self.reduce(kid) for kid in kids]
                 self._apply_pair_reduction(kids, self._reduce_pair_or)
-                return And(kids)
+                return Or(kids)
             case _:
                 return op

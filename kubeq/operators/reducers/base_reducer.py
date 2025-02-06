@@ -7,9 +7,6 @@ from kubeq import attr
 class BaseReducer(ABC):
     reductions = 0
 
-    def __init__(self, attr: attr.Any):
-        self.attr = attr
-
     def increment(self):
         self.reductions += 1
 

@@ -10,7 +10,7 @@ from kubeq import operators as oprs
 from kubeq.operators.op_base import Op
 
 
-def visualize_operator(x: Op):
+def visualize_operator(x: Op, *, title: str | None = None):
     def _get_children(x: Op):
         match x:
             case oprs.Bool():
@@ -47,6 +47,8 @@ def visualize_operator(x: Op):
 
     def _get_value(x: Op):
         class_name = x.__class__.__name__
+        if original := getattr(x, "original", None):
+            return _get_value(original)
         match x:
             case oprs.Bool():
                 return _title(class_name)
@@ -58,7 +60,10 @@ def visualize_operator(x: Op):
                 raise ValueError(f"Unknown type {class_name}")
 
     pt = PrettyPrintTree(
-        get_children=_get_children, get_val=_get_value, return_instead_of_print=True
+        get_children=_get_children,
+        get_val=_get_value,
+        return_instead_of_print=True,
+        start_message=lambda _: title,
     )  # type: ignore
     return pt(x)  # type: ignore
 
@@ -66,3 +71,7 @@ def visualize_operator(x: Op):
 def collection_repr(name: str, sep: str, collection: Iterable[Any]) -> str:
     stuff = sep.join([f"{v!r}" for v in collection])
     return f"{name}({stuff})"
+
+
+def print_operator(title: str, x: Op):
+    print(visualize_operator(x, title=title))

@@ -31,13 +31,12 @@ class DnfReducer(BaseReducer):
                 return Or.of(op)
 
 
-def get_dnf_reduction_count(sel: Selector) -> int:
-    attr = sel.attr
-    op = sel.operator
-    reducer = DnfReducer(attr)
+def get_dnf_reduction_count(op: Op) -> int:
+    reducer = DnfReducer()
     reducer.reduce(op)
     return reducer.reductions
 
 
-def assert_dnf(s: Selector):
+def assert_dnf(s: Op):
     count = get_dnf_reduction_count(s)
+    assert count == 0, f"DNF reduction count is {count}, expected 0"

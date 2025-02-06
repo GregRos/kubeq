@@ -16,6 +16,6 @@ def squash_simplify_selectors(
     for attr, group in grouped:
         all_operators = [sel.operator for sel in group]
         anded = oprs.And(all_operators)
-        simplified = to_simplified_dnf(Selector(attr, anded))
-        d[attr] = simplified
+        simplified = to_simplified_dnf(anded)
+        d[attr] = Selector(attr, simplified)
     return d
