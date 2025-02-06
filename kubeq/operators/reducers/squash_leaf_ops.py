@@ -4,9 +4,9 @@ from kubeq.operators.boolean.boolean_ops import Bool
 from kubeq.operators.boolean.op_and import And
 from kubeq.operators.boolean.op_or import Or
 from kubeq.operators.op_base import Op
-from kubeq.operators.primitives.op_always import Always
-from kubeq.operators.primitives.op_exists import Exists
-from kubeq.operators.primitives.op_missing import Missing
+from kubeq.operators.prim.op_always import Always
+from kubeq.operators.prim.op_exists import Exists
+from kubeq.operators.prim.op_missing import Missing
 from kubeq.operators.reducers.base_reducer import BaseReducer
 from kubeq.operators.value_ops.kube_op_eq import Eq
 from kubeq.operators.value_ops.kube_op_not_eq import NotEq
@@ -16,16 +16,20 @@ from kubeq.operators.value_ops.op_not_glob import NotGlob
 from kubeq.operators.value_ops.op_not_in import NotIn
 from kubeq.operators.value_ops.op_not_regexp import NotRegex
 from kubeq.operators.value_ops.op_regexp import Regex
-from kubeq.operators.primitives.op_never import Never
+from kubeq.operators.prim.op_never import Never
 from kubeq.operators.value_ops.op_value import ValueOp
 
 
-class LeafReducer(BaseReducer):
+class Squash_Leaf_Ops(BaseReducer):
+
+    def __init__(self, *, normalize_operators=True):
+        self.normalize_operators = normalize_operators
+        super().__init__()
 
     def _reduce_pair_and(self, a: Op, b: Op) -> tuple[Op, Op]:
         self.increment()
-        a = a.normalize()
-        b = b.normalize()
+        a = a.normalize() if self.normalize_operators else a
+        b = b.normalize() if self.normalize_operators else b
         match a, b:
             # MISSING & NOTIN -> MISSING
             # MISSING & NOTREGEX -> MISSING

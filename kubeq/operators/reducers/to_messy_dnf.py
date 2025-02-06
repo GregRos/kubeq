@@ -6,11 +6,13 @@ from kubeq.operators.reducers.base_reducer import BaseReducer
 from kubeq.selection.selector import Selector
 
 
-class DnfReducer(BaseReducer):
+class To_Messy_Dnf(BaseReducer):
 
     def _pair_reduce(self, a: Or, b: Or):
-        self.increment()
-        return Or(And([x, y]) for x, y in product(a.operands, b.operands))
+        x = [And([x, y]) for x, y in product(a.operands, b.operands)]
+        if len(x) > 1:
+            self.increment()
+        return Or(x)
 
     def _and_reduce(self, op: And):
         kids = list(op.operands)
@@ -32,7 +34,7 @@ class DnfReducer(BaseReducer):
 
 
 def get_dnf_reduction_count(op: Op) -> int:
-    reducer = DnfReducer()
+    reducer = To_Messy_Dnf()
     reducer.reduce(op)
     return reducer.reductions
 

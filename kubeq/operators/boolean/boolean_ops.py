@@ -19,13 +19,14 @@ class Bool(Op, ABC):
     def __init__(self, *args: Any) -> None:
         match list(args):
             case []:
-                self.operands = []
+                operands = []
             case [Op(), *_] as x:
-                self.operands = x
+                operands = x
             case [x] if isinstance(x, Iterable):
-                self.operands = list(x)
+                operands = list(x)
             case _:
                 raise ValueError("Invalid arguments")
+        self.operands = operands
         super().__init__()
 
     def __iter__(self):
@@ -35,7 +36,7 @@ class Bool(Op, ABC):
         return isinstance(other, self.__class__) and self.operands == other.operands
 
     def __hash__(self) -> int:
-        return hash(self.operands)
+        return hash(frozenset(self.operands))
 
     def normalize(self) -> Op:
         return self

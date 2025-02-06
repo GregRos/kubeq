@@ -1,4 +1,4 @@
-from kubeq.operators.primitives.primitive_op import Primitive
+from kubeq.operators.prim.primitive_op import Primitive
 
 
 class Always(Primitive):

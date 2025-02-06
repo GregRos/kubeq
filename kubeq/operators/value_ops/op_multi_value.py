@@ -19,5 +19,8 @@ class MultiValueOp(ValueOp[set[str]], value_type=set[str]):
     def __repr__(self) -> str:
         return collection_repr(self.__class__.__name__, ", ", self.value)
 
+    def __hash__(self) -> int:
+        return hash(frozenset(self.value))
+
     def normalize(self) -> Op:
         return self

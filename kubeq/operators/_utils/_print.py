@@ -1,5 +1,6 @@
 from ast import Or
 from math import ceil
+import re
 from typing import TYPE_CHECKING, Any, Iterable
 from PrettyPrint import PrettyPrintTree
 from colorama import Back
@@ -8,6 +9,22 @@ import termcolor
 from kubeq import operators as oprs
 
 from kubeq.operators.op_base import Op
+
+# 7-bit C1 ANSI sequences
+ansi_escape = re.compile(
+    r"""
+    \x1B  # ESC
+    (?:   # 7-bit C1 Fe (except CSI)
+        [@-Z\\-_]
+    |     # or [ for CSI, followed by a control sequence
+        \[
+        [0-?]*  # Parameter bytes
+        [ -/]*  # Intermediate bytes
+        [@-~]   # Final byte
+    )
+""",
+    re.VERBOSE,
+)
 
 
 def visualize_operator(x: Op, *, title: str | None = None):
@@ -45,6 +62,16 @@ def visualize_operator(x: Op, *, title: str | None = None):
         printed = printed.center(max_length)
         return "\n".join([_title(title), _value(printed)])
 
+    def _get_max_tree_width(tree: str):
+        split = tree.split("\n")
+        stripped = [ansi_escape.sub("", x) for x in split]
+        max_length = max(len(x) for x in stripped)
+        return max_length
+
+    def _typeset_tree_title(title: str, tree: str):
+        width = _get_max_tree_width(tree)
+        return f"{title.center(width)}\n{tree}"
+
     def _get_value(x: Op):
         class_name = x.__class__.__name__
         if original := getattr(x, "original", None):
@@ -63,9 +90,13 @@ def visualize_operator(x: Op, *, title: str | None = None):
         get_children=_get_children,
         get_val=_get_value,
         return_instead_of_print=True,
-        start_message=lambda _: title,
     )  # type: ignore
-    return pt(x)  # type: ignore
+
+    tree = pt(x)  # type: ignore
+    if tree is None:
+        raise ValueError("Tree is None")
+    with_title = _typeset_tree_title(title, tree) if title else tree
+    return with_title
 
 
 def collection_repr(name: str, sep: str, collection: Iterable[Any]) -> str:

@@ -4,7 +4,7 @@ from typing import Iterable
 
 from kubeq import attr
 import kubeq.operators as oprs
-from kubeq.selection.to_simplified_dnf import to_simplified_dnf
+from kubeq.operators.reducers.to_minimal_dnf import to_simplified_dnf
 from kubeq.selection.selector import Selector
 
 

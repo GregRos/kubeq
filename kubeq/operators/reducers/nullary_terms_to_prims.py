@@ -2,16 +2,16 @@ from kubeq.operators.boolean.boolean_ops import Bool
 from kubeq.operators.boolean.op_and import And
 from kubeq.operators.boolean.op_or import Or
 from kubeq.operators.op_base import Op
-from kubeq.operators.primitives.op_always import Always
-from kubeq.operators.primitives.op_exists import Exists
-from kubeq.operators.primitives.op_missing import Missing
-from kubeq.operators.primitives.op_never import Never
+from kubeq.operators.prim.op_always import Always
+from kubeq.operators.prim.op_exists import Exists
+from kubeq.operators.prim.op_missing import Missing
+from kubeq.operators.prim.op_never import Never
 from kubeq.operators.reducers.base_reducer import BaseReducer
 from kubeq.operators.value_ops.op_in import In
 from kubeq.operators.value_ops.op_not_in import NotIn
 
 
-class Reduced_Nullary_Terms_To_Prims(BaseReducer):
+class Nullary_Terms_To_Prims(BaseReducer):
 
     def reduce(self, op: Op) -> Op:
 

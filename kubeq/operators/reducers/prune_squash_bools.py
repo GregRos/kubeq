@@ -1,13 +1,13 @@
 from kubeq.operators.boolean.op_and import And
 from kubeq.operators.boolean.op_or import Or
 from kubeq.operators.op_base import Op
-from kubeq.operators.primitives.op_always import Always
-from kubeq.operators.primitives.op_exists import Exists
-from kubeq.operators.primitives.op_never import Never
+from kubeq.operators.prim.op_always import Always
+from kubeq.operators.prim.op_exists import Exists
+from kubeq.operators.prim.op_never import Never
 from kubeq.operators.reducers.base_reducer import BaseReducer
 
 
-class Pruner(BaseReducer):
+class Prune_Squash_Bools(BaseReducer):
 
     def _prune_and(self, op: And):
         pruned = []

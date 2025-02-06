@@ -13,4 +13,7 @@ class BaseReducer(ABC):
     def decrement(self):
         self.reductions -= 1
 
+    def reset(self):
+        self.reductions = 0
+
     def reduce(self, op: Op) -> Op: ...
