@@ -11,7 +11,6 @@ from .prim.op_never import Never
 from .boolean import Bool
 from .prim.op_exists import Exists
 from .boolean.op_or import Or
-from ._utils._print import visualize_operator
 from .boolean.op_and import And
 from .boolean.op_or import Or
 from .op_base import Op

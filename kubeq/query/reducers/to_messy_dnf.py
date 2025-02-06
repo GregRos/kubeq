@@ -1,8 +1,7 @@
 from itertools import product
-from kubeq.query.operators.boolean.op_and import And
-from kubeq.query.operators.boolean.op_or import Or
-from kubeq.query.operators.op_base import Op
-from kubeq.query.operators.reducers.base_reducer import BaseReducer
+from typing import Iterable
+from kubeq.query.operators import *
+from kubeq.query.reducers.base_reducer import BaseReducer
 
 
 class To_Messy_Dnf(BaseReducer):

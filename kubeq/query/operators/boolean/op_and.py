@@ -1,4 +1,4 @@
-from kubeq.query.operators._utils._print import collection_repr
+from kubeq.query._utils.render_parts import collection_repr
 from kubeq.query.operators.boolean.boolean_ops import Bool
 from kubeq.query.operators.op_base import Op
 

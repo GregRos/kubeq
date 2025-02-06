@@ -1,14 +1,5 @@
-from kubeq.query.operators.boolean.boolean_ops import Bool
-from kubeq.query.operators.boolean.op_and import And
-from kubeq.query.operators.boolean.op_or import Or
-from kubeq.query.operators.op_base import Op
-from kubeq.query.operators.prim.op_always import Always
-from kubeq.query.operators.prim.op_exists import Exists
-from kubeq.query.operators.prim.op_missing import Missing
-from kubeq.query.operators.prim.op_never import Never
-from kubeq.query.operators.reducers.base_reducer import BaseReducer
-from kubeq.query.operators.value_ops.op_in import In
-from kubeq.query.operators.value_ops.op_not_in import NotIn
+from kubeq.query.operators import *
+from .base_reducer import BaseReducer
 
 
 class Nullary_Terms_To_Prims(BaseReducer):

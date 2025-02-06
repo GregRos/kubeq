@@ -1,12 +1,10 @@
-from kubeq.query.operators._utils._print import print_operator
-from kubeq.query.operators.op_base import Op
-from kubeq.query.operators.reducers.base_reducer import BaseReducer
-from kubeq.query.operators.reducers.to_messy_dnf import To_Messy_Dnf, assert_dnf
-from kubeq.query.operators.reducers.squash_leaf_ops import Squash_Leaf_Ops
-from kubeq.query.operators.reducers.prune_squash_bools import Prune_Squash_Bools
-from kubeq.query.operators.reducers.nullary_terms_to_prims import (
-    Nullary_Terms_To_Prims,
-)
+from kubeq.query._utils.render_op import print_operator
+from kubeq.query.operators import *
+from .base_reducer import BaseReducer
+from .to_messy_dnf import To_Messy_Dnf, assert_dnf
+from .squash_leaf_ops import Squash_Leaf_Ops
+from .prune_squash_bools import Prune_Squash_Bools
+from .nullary_terms_to_prims import Nullary_Terms_To_Prims
 
 
 class To_Minimal_Dnf(BaseReducer):
@@ -34,7 +32,6 @@ class To_Minimal_Dnf(BaseReducer):
                 return op
 
     def reduce(self, op: Op) -> Op:
-        from .._utils._print import print_operator
 
         to_messy_dnf = To_Messy_Dnf()
         print_operator("input", op)

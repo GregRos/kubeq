@@ -1,23 +1,7 @@
 from itertools import product
 from typing import Callable
-from kubeq.query.operators.boolean.boolean_ops import Bool
-from kubeq.query.operators.boolean.op_and import And
-from kubeq.query.operators.boolean.op_or import Or
-from kubeq.query.operators.op_base import Op
-from kubeq.query.operators.prim.op_always import Always
-from kubeq.query.operators.prim.op_exists import Exists
-from kubeq.query.operators.prim.op_missing import Missing
-from kubeq.query.operators.reducers.base_reducer import BaseReducer
-from kubeq.query.operators.value_ops.kube_op_eq import Eq
-from kubeq.query.operators.value_ops.kube_op_not_eq import NotEq
-from kubeq.query.operators.value_ops.op_glob import Glob
-from kubeq.query.operators.value_ops.op_in import In
-from kubeq.query.operators.value_ops.op_not_glob import NotGlob
-from kubeq.query.operators.value_ops.op_not_in import NotIn
-from kubeq.query.operators.value_ops.op_not_regexp import NotRegex
-from kubeq.query.operators.value_ops.op_regexp import Regex
-from kubeq.query.operators.prim.op_never import Never
-from kubeq.query.operators.value_ops.op_value import ValueOp
+from kubeq.query.operators import *
+from .base_reducer import BaseReducer
 
 
 class Squash_Leaf_Ops(BaseReducer):

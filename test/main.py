@@ -1,4 +1,6 @@
+from kubeq.query._utils.render_op import render_operator
 from kubeq.query.operators import *
+from kubeq.query import *
 
 
 def start():
@@ -12,4 +14,4 @@ def start():
     )
     lots = to_minimal_dnf(lots)
 
-    print(visualize_operator(lots))
+    print(render_operator(lots))

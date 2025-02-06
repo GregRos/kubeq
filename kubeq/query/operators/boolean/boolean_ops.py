@@ -1,7 +1,6 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Any, Iterable, Self, overload
 
-from kubeq.query.operators._utils._print import collection_repr
 from kubeq.query.operators.op_base import Op
 
 

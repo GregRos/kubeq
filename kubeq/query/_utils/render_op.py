@@ -1,14 +1,11 @@
-from ast import Or
 from math import ceil
 import re
-from typing import TYPE_CHECKING, Any, Iterable
+from typing import TYPE_CHECKING, Any
 from PrettyPrint import PrettyPrintTree
 from colorama import Back
 import colorama
 import termcolor
-from ... import operators as oprs
-
-from kubeq.query.operators.op_base import Op
+import kubeq.query.operators as oprs
 
 # 7-bit C1 ANSI sequences
 ansi_escape = re.compile(
@@ -27,8 +24,9 @@ ansi_escape = re.compile(
 )
 
 
-def visualize_operator(x: Op, *, title: str | None = None):
-    def _get_children(x: Op):
+def render_operator(x: oprs.Op, *, title: str | None = None):
+
+    def _get_children(x: oprs.Op):
         match x:
             case oprs.Bool():
                 return x.operands
@@ -72,7 +70,7 @@ def visualize_operator(x: Op, *, title: str | None = None):
         width = _get_max_tree_width(tree)
         return f"{title.center(width)}\n{tree}"
 
-    def _get_value(x: Op):
+    def _get_value(x: oprs.Op):
         class_name = x.__class__.__name__
         if original := getattr(x, "original", None):
             return _get_value(original)
@@ -99,10 +97,5 @@ def visualize_operator(x: Op, *, title: str | None = None):
     return with_title
 
 
-def collection_repr(name: str, sep: str, collection: Iterable[Any]) -> str:
-    stuff = sep.join([f"{v!r}" for v in collection])
-    return f"{name}({stuff})"
-
-
-def print_operator(title: str, x: Op):
-    print(visualize_operator(x, title=title))
+def print_operator(title: str, x: oprs.Op):
+    print(render_operator(x, title=title))

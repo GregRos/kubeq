@@ -1,5 +1,5 @@
 from typing import overload
-from kubeq.query.operators._utils._print import collection_repr
+from kubeq.query._utils.render_parts import collection_repr
 from kubeq.query.operators.op_base import Op
 from kubeq.query.operators.value_ops.op_value import ValueOp
 from kubeq.query.operators.value_ops.repr_collection import repr_collection

@@ -1,5 +1,5 @@
-from kubeq.query.operators.reducers.base_reducer import BaseReducer
 from kubeq.query import *
+from kubeq.query.reducers.base_reducer import BaseReducer
 
 
 class KubeLeafReducer(BaseReducer):
