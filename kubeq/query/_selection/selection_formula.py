@@ -1,7 +1,7 @@
 from itertools import groupby
 from typing import Iterable, Mapping, override
 from kubeq.query._selection import Selector
-import kubeq.query.operators as oprs
+import kubeq.query._operators as oprs
 import kubeq.query._attr as _attr
 
 

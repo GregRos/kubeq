@@ -1,4 +1,4 @@
-from . import operators as oprs
+from . import _operators as oprs
 from ._selection.selection_formula import SelectionFormula
 from ._selection.selector import Selector
 from . import _reducers as red

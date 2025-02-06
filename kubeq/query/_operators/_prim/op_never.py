@@ -1,4 +1,4 @@
-from kubeq.query.operators._prim.primitive_op import Primitive
+from kubeq.query._operators._prim.primitive_op import Primitive
 
 
 class Never(Primitive):

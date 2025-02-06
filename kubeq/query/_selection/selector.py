@@ -2,7 +2,7 @@ from itertools import groupby
 from typing import Iterable, ReadOnly
 
 from kubeq.query import _attr
-from kubeq.query import operators as oprs
+from kubeq.query import _operators as oprs
 
 from kr8s.objects import APIObject
 

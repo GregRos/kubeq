@@ -1,6 +1,6 @@
 from itertools import product
 from typing import Iterable
-from kubeq.query.operators import *
+from kubeq.query._operators import *
 from kubeq.query._reducers._base_reducer import BaseReducer
 
 

@@ -5,7 +5,7 @@ from PrettyPrint import PrettyPrintTree
 from colorama import Back
 import colorama
 import termcolor
-import kubeq.query.operators as oprs
+import kubeq.query._operators as oprs
 
 # 7-bit C1 ANSI sequences
 ansi_escape = re.compile(

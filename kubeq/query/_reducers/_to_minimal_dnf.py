@@ -1,5 +1,5 @@
 from kubeq.query._utils.render_op import print_operator
-from kubeq.query.operators import *
+from kubeq.query._operators import *
 from ._base_reducer import BaseReducer
 from ._to_messy_dnf import To_Messy_Dnf, assert_dnf
 from ._squash_leaf_ops import Squash_Leaf_Ops

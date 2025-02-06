@@ -1,4 +1,4 @@
-from kubeq.query.operators._op_base import Op
+from kubeq.query._operators._op_base import Op
 
 
 from typeguard import check_type

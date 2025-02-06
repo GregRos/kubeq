@@ -1,5 +1,5 @@
 from ast import NotEq, NotIn
-from kubeq.query.operators import *
+from kubeq.query._operators import *
 from ._base_reducer import BaseReducer
 
 

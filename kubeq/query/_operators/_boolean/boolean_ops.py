@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Any, Iterable, Self, overload
 
-from kubeq.query.operators._op_base import Op
+from kubeq.query._operators._op_base import Op
 
 
 class Bool(Op, ABC):

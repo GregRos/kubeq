@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from kubeq.query.operators._value_ops.op_value import ValueOp
+from kubeq.query._operators._value_ops.op_value import ValueOp
 
 if TYPE_CHECKING:
-    from kubeq.query.operators._value_ops.op_regexp import Regex
+    from kubeq.query._operators._value_ops.op_regexp import Regex
 
 
 import fnmatch

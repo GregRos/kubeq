@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
-from kubeq.query.operators._op_base import Op
-from kubeq.query.operators._value_ops.op_value import ValueOp
+from kubeq.query._operators._op_base import Op
+from kubeq.query._operators._value_ops.op_value import ValueOp
 
 if TYPE_CHECKING:
-    from kubeq.query.operators._value_ops.op_not_glob import NotGlob
+    from kubeq.query._operators._value_ops.op_not_glob import NotGlob
 
 
 import re

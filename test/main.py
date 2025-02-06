@@ -1,9 +1,6 @@
 from kubeq.query._utils.render_op import render_operator
-from kubeq.query.operators import *
+from kubeq.query._operators import *
 from kubeq.query import *
-from kubeq.query.operators._boolean import boolean_ops
-
-boolean_ops
 
 
 def start():

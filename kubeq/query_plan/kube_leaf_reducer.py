@@ -3,14 +3,14 @@ from kubeq.query._reducers._base_reducer import BaseReducer
 
 
 class KubeLeafReducer(BaseReducer):
-    def __init__(self, attr: _attr.Any):
+    def __init__(self, attr: attr.Any):
         self.attr = attr
         super().__init__()
 
     def reduce(self, op: oprs.Op) -> oprs.Op:
         match self.attr, op:
             case (
-                _attr.Label(),
+                attr.Label(),
                 oprs.In() | oprs.NotIn() | oprs.Missing() | oprs.Exists(),
             ):
                 # in, notin, exists, missing: allowed for labels
