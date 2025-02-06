@@ -2,6 +2,10 @@ from abc import ABC, abstractmethod
 from typing import Callable, ClassVar, TypeGuard, TypeIs
 
 
+class UnboundedToken:
+    pass
+
+
 class Op(ABC):
     @abstractmethod
     def __call__(self, what: str) -> bool: ...

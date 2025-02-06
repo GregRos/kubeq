@@ -1,4 +1,9 @@
 {
   "python.analysis.typeCheckingMode": "standard",
-  "python.analysis.diagnosticMode": "workspace"
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.ignore": [
+    "**/site-packages/**/*",
+    "**/Lib/**/*",
+    "**/python/**/*"
+  ]
 }
