@@ -1,5 +1,5 @@
-from kubeq.operators.op_base import Op
-from kubeq.operators.prim.primitive_op import Primitive
+from kubeq.query.operators.op_base import Op
+from kubeq.query.operators.prim.primitive_op import Primitive
 
 
 class Missing(Primitive):

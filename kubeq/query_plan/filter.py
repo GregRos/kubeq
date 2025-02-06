@@ -1,7 +1,6 @@
 from aioreactive import AsyncObservable, filter_async, pipe, filter
 from kr8s.objects import APIObject
-
-from kubeq.selection.selector import Selector
+from kubeq.query import *
 
 
 class ObjectFilter:

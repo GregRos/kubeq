@@ -1,6 +1,6 @@
-from kubeq.operators.op_base import Op
-from kubeq.operators.value_ops.op_glob import Glob
-from kubeq.operators.value_ops.op_value import ValueOp
+from kubeq.query.operators.op_base import Op
+from kubeq.query.operators.value_ops.op_glob import Glob
+from kubeq.query.operators.value_ops.op_value import ValueOp
 
 
 import re

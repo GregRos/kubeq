@@ -1,17 +1,12 @@
-import kubeq.operators as oprs
-
-from kubeq.operators._utils._print import print_operator
-from kubeq.operators.op_base import Op
-from kubeq.operators.reducers.base_reducer import BaseReducer
-from kubeq.operators.reducers.to_messy_dnf import To_Messy_Dnf, assert_dnf
-from kubeq.operators.reducers.squash_leaf_ops import Squash_Leaf_Ops
-from kubeq.operators.reducers.prune_squash_bools import Prune_Squash_Bools
-from kubeq.operators.reducers.nullary_terms_to_prims import (
+from kubeq.query.operators._utils._print import print_operator
+from kubeq.query.operators.op_base import Op
+from kubeq.query.operators.reducers.base_reducer import BaseReducer
+from kubeq.query.operators.reducers.to_messy_dnf import To_Messy_Dnf, assert_dnf
+from kubeq.query.operators.reducers.squash_leaf_ops import Squash_Leaf_Ops
+from kubeq.query.operators.reducers.prune_squash_bools import Prune_Squash_Bools
+from kubeq.query.operators.reducers.nullary_terms_to_prims import (
     Nullary_Terms_To_Prims,
 )
-
-import kubeq.attr
-from kubeq.selection.selector import Selector
 
 
 class To_Minimal_Dnf(BaseReducer):

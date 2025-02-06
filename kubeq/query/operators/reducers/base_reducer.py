@@ -1,7 +1,7 @@
 from abc import ABC
 
-from kubeq.operators.op_base import Op
-from kubeq import attr
+from kubeq.query.operators.op_base import Op
+from kubeq.query import *
 
 
 class BaseReducer(ABC):

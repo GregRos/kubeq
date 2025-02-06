@@ -1,13 +1,13 @@
 from ast import NotEq, NotIn
-from kubeq.operators.boolean.op_and import And
-from kubeq.operators.boolean.op_or import Or
-from kubeq.operators.prim.op_always import Always
-from kubeq.operators.prim.op_missing import Missing
-from kubeq.operators.prim.op_never import Never
-from kubeq.operators.value_ops.kube_op_eq import Eq
-from kubeq.operators.value_ops.op_in import In
-from kubeq.operators.op_base import Op
-from kubeq.operators.reducers.base_reducer import BaseReducer
+from kubeq.query.operators.boolean.op_and import And
+from kubeq.query.operators.boolean.op_or import Or
+from kubeq.query.operators.prim.op_always import Always
+from kubeq.query.operators.prim.op_missing import Missing
+from kubeq.query.operators.prim.op_never import Never
+from kubeq.query.operators.value_ops.kube_op_eq import Eq
+from kubeq.query.operators.value_ops.op_in import In
+from kubeq.query.operators.op_base import Op
+from kubeq.query.operators.reducers.base_reducer import BaseReducer
 
 
 class To_Finite_Set(BaseReducer):

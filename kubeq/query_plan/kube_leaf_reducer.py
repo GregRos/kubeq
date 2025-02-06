@@ -1,9 +1,5 @@
-from kubeq.attr.field import Field
-from kubeq.attr.label import Label
-import kubeq.operators as oprs
-
-from kubeq.operators.reducers.base_reducer import BaseReducer
-from kubeq import attr
+from kubeq.query.operators.reducers.base_reducer import BaseReducer
+from kubeq.query import *
 
 
 class KubeLeafReducer(BaseReducer):
@@ -13,7 +9,10 @@ class KubeLeafReducer(BaseReducer):
 
     def reduce(self, op: oprs.Op) -> oprs.Op:
         match self.attr, op:
-            case Label(), oprs.In() | oprs.NotIn() | oprs.Missing() | oprs.Exists():
+            case (
+                attr.Label(),
+                oprs.In() | oprs.NotIn() | oprs.Missing() | oprs.Exists(),
+            ):
                 # in, notin, exists, missing: allowed for labels
                 return op
             case _, oprs.In(kids):

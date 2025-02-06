@@ -1,10 +1,10 @@
-from kubeq.operators.boolean.op_and import And
-from kubeq.operators.boolean.op_or import Or
-from kubeq.operators.op_base import Op
-from kubeq.operators.prim.op_always import Always
-from kubeq.operators.prim.op_exists import Exists
-from kubeq.operators.prim.op_never import Never
-from kubeq.operators.reducers.base_reducer import BaseReducer
+from kubeq.query.operators.boolean.op_and import And
+from kubeq.query.operators.boolean.op_or import Or
+from kubeq.query.operators.op_base import Op
+from kubeq.query.operators.prim.op_always import Always
+from kubeq.query.operators.prim.op_exists import Exists
+from kubeq.query.operators.prim.op_never import Never
+from kubeq.query.operators.reducers.base_reducer import BaseReducer
 
 
 class Prune_Squash_Bools(BaseReducer):

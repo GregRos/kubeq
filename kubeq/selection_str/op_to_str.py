@@ -1,6 +1,5 @@
 from typing import Iterable
-from kubeq import attr
-import kubeq.operators as oprs
+from kubeq.query import *
 
 
 def _format_in_list(vals: Iterable[str]):

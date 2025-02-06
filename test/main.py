@@ -1,5 +1,4 @@
-from kubeq.operators import *
-from kubeq.operators.reducers import to_minimal_dnf
+from kubeq.query.operators import *
 
 
 def start():

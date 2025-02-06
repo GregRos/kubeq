@@ -1,8 +1,8 @@
 from itertools import groupby
 from typing import Iterable, Mapping, override
-from kubeq import attr
-from kubeq import operators as oprs
-from kubeq.selection.selector import Selector
+from kubeq.query.selection import Selector
+import kubeq.query.operators as oprs
+import kubeq.query.attr as attr
 
 
 class SelectionFormula(Mapping[attr.Any, oprs.Op]):

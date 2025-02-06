@@ -1,6 +1,6 @@
-from kubeq import attr
-import kubeq.operators as oprs
-from kubeq.selection.selector import Selector
+from kubeq.query import *
+
+
 from kubeq.selection_str.op_to_str import format_op
 
 

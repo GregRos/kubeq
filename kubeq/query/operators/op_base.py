@@ -20,11 +20,11 @@ class Op(ABC):
     def normalize(self) -> "Op": ...
 
     def and_(self, *others: "Op"):
-        from kubeq.operators.boolean.op_and import And
+        from kubeq.query.operators.boolean.op_and import And
 
         return And([self, *others])
 
     def or_(self, *others: "Op"):
-        from kubeq.operators.boolean.op_or import Or
+        from kubeq.query.operators.boolean.op_or import Or
 
         return Or([self, *others])

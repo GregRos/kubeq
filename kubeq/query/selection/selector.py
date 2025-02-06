@@ -1,7 +1,8 @@
 from itertools import groupby
 from typing import Iterable, ReadOnly
-import kubeq.operators as oprs
-from kubeq import attr
+
+from kubeq.query import attr
+from kubeq.query import operators as oprs
 
 from kr8s.objects import APIObject
 

@@ -1,5 +1,5 @@
-from kubeq.operators.value_ops.op_not_in import NotIn
-from kubeq.operators.value_ops.op_value import ValueOp
+from kubeq.query.operators.value_ops.op_not_in import NotIn
+from kubeq.query.operators.value_ops.op_value import ValueOp
 
 
 class NotEq(ValueOp[str], value_type=str):

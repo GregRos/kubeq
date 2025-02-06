@@ -1,6 +1,6 @@
-from kubeq.operators._utils._print import collection_repr
-from kubeq.operators.boolean.boolean_ops import Bool
-from kubeq.operators.op_base import Op
+from kubeq.query.operators._utils._print import collection_repr
+from kubeq.query.operators.boolean.boolean_ops import Bool
+from kubeq.query.operators.op_base import Op
 
 
 from typing import Callable, Iterable
