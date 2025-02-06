@@ -1,6 +1,6 @@
 from . import operators as oprs
-from .selection.selection_formula import SelectionFormula
-from .selection.selector import Selector
-from . import reducers as red
-from . import attr as attr
-from . import _utils
+from ._selection.selection_formula import SelectionFormula
+from ._selection.selector import Selector
+from . import _reducers as red
+from . import _attr as attr
+from . import _utils as utils

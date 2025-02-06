@@ -1,9 +1,13 @@
 from kubeq.query._utils.render_op import render_operator
 from kubeq.query.operators import *
 from kubeq.query import *
+from kubeq.query.operators._boolean import boolean_ops
+
+boolean_ops
 
 
 def start():
+    oprs._boolean.And()
     lots = (
         Eq("1")
         .and_(Eq("3"), In("2", "4"))
@@ -12,6 +16,6 @@ def start():
         .or_(NotGlob("*.py"))
         .and_(Eq("7").or_(Eq("1"), Eq("5"), Eq("10")))
     )
-    lots = to_minimal_dnf(lots)
+    lots = red.to_minimal_dnf(lots)
 
     print(render_operator(lots))

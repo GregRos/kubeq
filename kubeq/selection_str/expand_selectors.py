@@ -13,8 +13,8 @@ def expand_selector(selector: Selector) -> Iterable[Selector]:
 
 
 def multiplex_complex_selectors(
-    sels: dict[attr.Any, Selector]
-) -> Iterable[dict[attr.Any, Selector]]:
+    sels: dict[_attr.Any, Selector]
+) -> Iterable[dict[_attr.Any, Selector]]:
     selector_lists = [expand_selector(x) for x in sels.values()]
     for x in product(*selector_lists):
         yield {sel.attr: sel for sel in x}

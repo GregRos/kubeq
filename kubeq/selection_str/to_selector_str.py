@@ -5,13 +5,13 @@ from kubeq.selection_str.op_to_str import format_op
 
 
 def _validated_selector(sel: Selector):
-    assert not isinstance(sel.attr, attr.Kind), f"Selectors are not allowed for kinds"
+    assert not isinstance(sel.attr, _attr.Kind), f"Selectors are not allowed for kinds"
     op = oprs.And.of(sel.operator)
     for x in op.operands:
         assert not isinstance(
             x, (oprs.Or, oprs.And, oprs.Regex, oprs.Glob)
         ), f"Invalid operator {x}"
-        assert isinstance(sel.attr, attr.Label) or not isinstance(
+        assert isinstance(sel.attr, _attr.Label) or not isinstance(
             x, (oprs.In, oprs.NotIn, oprs.Missing, oprs.Exists)
         ), f"Operator {x} not allowed for {sel.attr}"
     return op

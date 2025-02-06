@@ -1,8 +1,3 @@
-from kubeq.query import *
+from kubeq import query as q
 
-
-def decide(selectors: list[Selector]):
-    squashed = SelectionFormula.squash(selectors)
-    finite_sets = {at: red.base_reducerattr) for attr in squashed}
-    if attr.Kind() in squashed:
-        return squashed[attr.Kind()]
+q.red.BaseReducer
