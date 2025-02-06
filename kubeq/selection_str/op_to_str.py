@@ -35,7 +35,7 @@ _format_exists = _make_unary_formatter("")
 _format_missing = _make_unary_formatter("!")
 
 
-def format_op(attr: attr.Any, op: oprs.Op):
+def format_op(attr: attrs.Any, op: oprs.Op):
     match op:
         case oprs.In(values):
             return _format_in(attr.name, values)

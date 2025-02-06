@@ -1,19 +1,19 @@
-from kr8s.objects import APIObject
+from box import Box
+from kr8s import api_resources
 
 
 from dataclasses import dataclass
 
+from kubeq.aliases._resource import APIResource
+
 
 @dataclass
 class Kind:
-    __match_args__ = []
+    __match_args__ = ("name",)
+    name: str
 
-    @property
-    def name(self) -> str:
-        return "kind"
-
-    def get(self, object: APIObject) -> str:
-        return object.kind
+    def get(self, object: APIResource) -> str:
+        return Box(object).get(self.name)
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, Kind)

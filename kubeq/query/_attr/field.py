@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Field:
-    __match_args__ = ["key"]
+    __match_args__ = ("name",)
     name: str
 
     def get(self, object: APIObject) -> str:

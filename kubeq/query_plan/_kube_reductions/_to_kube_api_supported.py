@@ -3,14 +3,14 @@ from kubeq.query._reductions._base_reduction import BaseReduction
 
 
 class To_Kube_Api_Supported(BaseReduction):
-    def __init__(self, attr: attr.Any):
+    def __init__(self, attr: attrs.Any):
         self.attr = attr
         super().__init__()
 
     def reduce(self, op: oprs.Op) -> oprs.Op:
         match self.attr, op:
             case (
-                attr.Label(),
+                attrs.Label(),
                 oprs.In() | oprs.NotIn() | oprs.Missing() | oprs.Exists(),
             ):
                 # in, notin, exists, missing: allowed for labels
@@ -40,5 +40,5 @@ class To_Kube_Api_Supported(BaseReduction):
                 return r
 
 
-def to_kube_api_supported(x: oprs.Op, attr: attr.Any) -> oprs.Op:
+def to_kube_api_supported(x: oprs.Op, attr: attrs.Any) -> oprs.Op:
     return To_Kube_Api_Supported(attr).reduce(x)
