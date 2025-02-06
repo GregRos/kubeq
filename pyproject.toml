@@ -13,8 +13,10 @@ kubernetes = "^32.0.0"
 kr8s = "^0.20.3"
 typeguard = "2.13.*"
 aioreactive = "^0.20.0"
+prettyprinttree = "^2.0.1"
 
 [tool.poetry.scripts]
+test = "test.main:start"
 start = "kubeq.main:start"
 [build-system]
 requires = ["poetry-core"]

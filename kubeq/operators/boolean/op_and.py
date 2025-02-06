@@ -1,3 +1,4 @@
+from kubeq.operators._utils._print import collection_repr
 from kubeq.operators.boolean.boolean_ops import Bool
 from kubeq.operators.op_base import Op
 
@@ -17,3 +18,6 @@ class And(Bool):
 
     def __call__(self, what: str) -> bool:
         return all(op(what) for op in self.operands)
+
+    def __repr__(self) -> str:
+        return collection_repr("", " & ", self.operands)

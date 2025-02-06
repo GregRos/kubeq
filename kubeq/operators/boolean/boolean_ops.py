@@ -1,7 +1,7 @@
 from abc import ABC
-from typing import Any, Iterable, Self, overload
-from kubeq.operators.boolean.op_or import Or
-from kubeq.operators.boolean.op_and import And
+from typing import TYPE_CHECKING, Any, Iterable, Self, overload
+
+from kubeq.operators._utils._print import collection_repr
 from kubeq.operators.op_base import Op
 
 
@@ -22,7 +22,7 @@ class Bool(Op, ABC):
                 self.operands = []
             case [Op(), *_] as x:
                 self.operands = x
-            case [Iterable() as x]:
+            case [x] if isinstance(x, Iterable):
                 self.operands = list(x)
             case _:
                 raise ValueError("Invalid arguments")
