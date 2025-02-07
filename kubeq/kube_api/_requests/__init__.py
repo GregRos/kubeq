@@ -1,4 +1,4 @@
-from ._get_resource_kinds import KubeGetResourceKinds
-from ._get_resources import KubeGetResources
+from ._api_resources_request import KubeGetApiResources
+from ._list_request import KubeListRequest
 
-type KubeRequest = KubeGetResourceKinds | KubeGetResources
+type KubeRequest = KubeGetApiResources | KubeListRequest

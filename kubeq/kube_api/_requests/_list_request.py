@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Iterable
 
+from kubeq.entities import KubeResource
+
 
 @dataclass
 class KubeSelector:
@@ -12,8 +14,8 @@ class KubeSelector:
         return f"{self.name} {self.operator} {self.value}"
 
 
-class KubeGetResources:
-    kind: str
+class KubeListRequest:
+    what: KubeResource
     namespace: str | None
     label_selector: Iterable[KubeSelector]
     field_selector: Iterable[KubeSelector]

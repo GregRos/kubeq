@@ -4,21 +4,15 @@ from typing import Literal
 from box import Box
 
 
-type KubeVerb = Literal[
-    "get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"
-]
-type Verbs = tuple[KubeVerb, ...]
-
-
 @dataclass
-class ResourceKind:
+class KubeKind:
     group: str
     version: str
     name: str
 
     @staticmethod
-    def from_(data: Box):
-        return ResourceKind(
+    def parse_object(data: Box):
+        return KubeKind(
             group=data.group,
             version=data.version,
             name=data.kind,
@@ -30,3 +24,7 @@ class ResourceKind:
             parts.append(self.group)
         parts.append(self.name)
         return "/".join(parts)
+
+    @property
+    def is_core(self):
+        return self.version == "v1"
