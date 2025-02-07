@@ -1,11 +1,24 @@
 from dataclasses import dataclass
 from mimetypes import MimeTypes
 from sys import api_version
-from typing import Iterable
+from typing import Any, Iterable, overload
 
 
-def _from_sections(sections: Iterable[str]):
-    return ";".join(sections)
+@overload
+def _from_sections(*sections: str) -> str: ...
+@overload
+def _from_sections(sections: Iterable[str], /) -> str: ...
+def _from_sections(*sections: Any) -> str:
+    def _do_it(sections: Iterable[str]) -> str:
+        return ";".join(sections)
+
+    match sections:
+        case (str(s), *rest):
+            return _do_it(sections)
+        case (sections,):
+            return _do_it(sections)
+        case _:
+            raise ValueError("Invalid input")
 
 
 def _format_kvp(k: str, v: str):
@@ -51,17 +64,3 @@ class AcceptHeader:
     def __str__(self):
         sections = _from_sections(self.content_type, *[str(s) for s in self.subclauses])
         return sections
-
-
-_v2_subclause = AcceptSubclause(
-    version="v2",
-    group="apidiscovery.k8s.io",
-    as_="APIGroupDiscoveryList",
-    content_type="application/json",
-)
-
-_v2_beta_subclause = _v2_subclause.with_(version="v2beta1")
-
-accept_for_discovery = AcceptHeader(
-    "application/json", _v2_subclause, _v2_beta_subclause
-)

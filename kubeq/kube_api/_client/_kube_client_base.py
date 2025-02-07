@@ -4,10 +4,10 @@ import os
 import platform
 from typing import Literal, Mapping
 from kr8s import Api
-from kubeq.kube_api._client._headers._user_agent import get_user_agent
-from kubeq.version import __version__
 
-type Method = Literal["GET", "POST", "PUT", "DELETE", "PATCH"]
+from kubeq.kube_api._client._http._accept_header import AcceptHeader
+from ._http import get_user_agent, Method
+from kubeq.version import __version__
 
 
 @dataclass(frozen=True, eq=False, repr=False, match_args=False, kw_only=True)
@@ -24,7 +24,13 @@ class KubeClientBase:
         }
 
     def send(
-        self, *, method: Method, url: str, headers: dict, payload: str | None = None
+        self,
+        *,
+        method: Method,
+        url: str,
+        accept: AcceptHeader,
+        headers: dict,
+        payload: str | None = None
     ):
         return self.api.call_api(
             base=url,

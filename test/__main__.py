@@ -1,4 +1,4 @@
-from .main import start
+from .kube_resources import start
 from kr8s import Api
 
 start()

@@ -1,3 +1,4 @@
+from box import Box
 from kr8s.objects import APIObject
 
 
@@ -11,10 +12,12 @@ class Field:
 
     def get(self, object: object) -> str:
         match object:
-            case APIObject(raw=raw):
-                return raw.get(self.name)
+            case APIObject() as o:
+                return o.raw[self.name]
+            case Box(d):
+                return d[self.name]
             case _:
-                raise TypeError(f"Object {object} does not have field {self.name}")
+                raise TypeError(f"Object {object} does not have kind")
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, Field) and self.name == other.name

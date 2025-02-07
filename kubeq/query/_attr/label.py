@@ -1,4 +1,5 @@
 from cProfile import label
+from box import Box
 from kr8s.objects import APIObject
 
 
@@ -14,10 +15,12 @@ class Label:
 
     def get(self, object: object) -> str:
         match object:
-            case APIObject(labels=labels):
-                return labels.get(self.name)
+            case APIObject() as o:
+                return o.raw[self.name]
+            case Box(d):
+                return d[self.name]
             case _:
-                raise TypeError(f"Object {object} does not have labels")
+                raise TypeError(f"Object {object} does not have kind")
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, Label) and self.name == other.name
