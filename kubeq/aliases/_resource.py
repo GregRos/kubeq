@@ -1,4 +1,8 @@
 from typing import Any
 
+from box import Box
 
-type APIResource = dict[str, Any]
+
+class APIResource(Box):
+    def __init__(self, input: dict):
+        super().__init__(input)

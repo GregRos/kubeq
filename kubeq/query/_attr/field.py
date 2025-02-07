@@ -9,8 +9,12 @@ class Field:
     __match_args__ = ("name",)
     name: str
 
-    def get(self, object: APIObject) -> str:
-        return getattr(object.raw, self.name)
+    def get(self, object: object) -> str:
+        match object:
+            case APIObject(raw=raw):
+                return raw.get(self.name)
+            case _:
+                raise TypeError(f"Object {object} does not have field {self.name}")
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, Field) and self.name == other.name

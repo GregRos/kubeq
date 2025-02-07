@@ -13,7 +13,7 @@ class Kind:
     name: str
 
     def get(self, object: APIResource) -> str:
-        return Box(object).get(self.name)
+        return object.get(self.name)
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, Kind)

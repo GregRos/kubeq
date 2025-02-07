@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "kubeq"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Query your cluster"
+authors = ["GregRos <work.gregr@gmail.com>"]
 readme = "README.md"
+license = "MIT"
+homepage = "gh:GregRos/kubeq"
+repository = "gh:GregRos/kubeq"
+keywords = ["kubernetes", "query", "cli", "kubectl", "k8s"]
 packages = [{ include = "kubeq" }]
 [tool.poetry.dependencies]
 python = "3.13.*"

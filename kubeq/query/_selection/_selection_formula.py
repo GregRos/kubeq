@@ -2,7 +2,9 @@ from collections import defaultdict
 from itertools import groupby
 from typing import Hashable, Iterable, Mapping, override
 from kubeq.query._selection import Selector
-from kubeq.query import *
+import kubeq.query._attr as attrs
+import kubeq.query._operators as oprs
+
 from kubeq.utils.dict import keys_of_type
 
 
@@ -10,9 +12,9 @@ class SelectionFormula(Mapping[attrs.Any, oprs.Op]):
 
     def __init__(self, selectors: Iterable[Selector]):
         squashed = _squash(selectors)
-        self._label_ops = keys_of_type(squashed, attrs.Label)
-        self._field_ops = keys_of_type(squashed, attrs.Field)
-        self._kind_ops = keys_of_type(squashed, attrs.Kind)
+        self._label_ops = squashed[attrs.Label]
+        self._field_ops = squashed[attrs.Field]
+        self._kind_ops = squashed[attrs.Kind]
         super().__init__()
 
     @property
@@ -36,9 +38,10 @@ def _squash(
     selectors: Iterable[Selector],
 ) -> Mapping[type, Mapping[attrs.Any, oprs.Op]]:
     grouped = groupby(selectors, lambda x: x.attr)
-    dd = defaultdict(default_factory=lambda: {})
+    dd = dict[type, dict[attrs.Any, oprs.Op]]()
     for attr, group in grouped:
         all_operators = [sel.operator for sel in group]
         anded = oprs.And(all_operators)
-        d[attr] = Selector(attr, anded)
-    return SelectionFormula(d)
+        ops = dd.setdefault(type(attr), dict())
+        ops[attr] = anded
+    return dd

@@ -15,7 +15,7 @@ class Selector:
     attr: _attr.Any
     operator: oprs.Op
 
-    def __call__(self, object: APIObject) -> bool:
+    def __call__(self, object: object) -> bool:
         return self.operator(self.attr.get(object))
 
     def with_op(self, operator: oprs.Op) -> "Selector":

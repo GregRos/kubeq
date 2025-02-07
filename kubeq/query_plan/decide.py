@@ -9,20 +9,12 @@ def _is_trivial(selectors: SelectionFormula) -> oprs.Always | oprs.Never | None:
                 return v
     return None
 
-def _resource_kinds(selectors: SelectionFormula);
+def _resource_kinds(selectors: SelectionFormula):
     kind_operator = selectors[Kind()]
     maybe_finite = to_finite_set(kind_operator)
     assert not isinstance(maybe_finite, oprs.Never), "Never should've been filtered out"
     match maybe_finite:
         case oprs.Always():
-
-def decide(selectors: list[Selector]):
-    squashed = SelectionFormula(selectors)
-    for k, v in squashed.items():
-        match v:
-            case oprs.Always():
-                return ["everything"]
-            case oprs.Never():
-                return []
+            
 
             
