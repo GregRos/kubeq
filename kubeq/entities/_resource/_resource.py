@@ -1,6 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import Literal, Mapping
+from typing import TYPE_CHECKING, Literal, Mapping
 
 from box import Box
 
@@ -22,8 +22,10 @@ class KubeResource(KubeResourceBase):
     categories: tuple[str, ...] = field(default=())
     children: Mapping[str, "KubeSubResource"] = field(default_factory=dict)
 
-    def list_url(self):
-        parts = self.kind.version
+    @property
+    def base_uri(self):
+        base = self.kind.base_uri
+        return "/".join([base, self.names.plural])
 
     @staticmethod
     def parse(res: Box):
@@ -54,13 +56,13 @@ class KubeResource(KubeResourceBase):
 
 @dataclass
 class KubeSubResource(KubeResourceBase):
-    names: KubeNames
+    name: str
     parent: KubeResource = field(init=False, repr=False)
 
     @staticmethod
     def parse_subresource(res: Box):
         return KubeSubResource(
-            names=KubeNames.parse_subresource(res),
+            name=res.subresource,
             kind=KubeKind.parse_object(res.responseKind),
             verbs=tuple(res.get("verbs", [])),
         )

@@ -14,12 +14,12 @@ class KubeKind:
     def parse_object(data: Box):
         return KubeKind(
             group=data.group,
-            version=data.version,
+            version=data.version or "v1",
             name=data.kind,
         )
 
     def __str__(self):
-        parts = [self.version or "v1"]
+        parts = [self.version]
         if self.group:
             parts.append(self.group)
         parts.append(self.name)
@@ -28,3 +28,9 @@ class KubeKind:
     @property
     def is_core(self):
         return self.version == "v1"
+
+    @property
+    def base_uri(self):
+        if self.is_core:
+            return "/".join(("api", self.version))
+        return "/".join(("apis", self.group, self.version))

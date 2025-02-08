@@ -1,9 +1,8 @@
 from kubeq.entities._resource._resource import KubeResource
-from kubeq.kube_api._client._http import AcceptHeader, AcceptSubclause
 from kubeq.kube_api._client._kube_client_base import KubeClientBase
 import aioreactive as rx
 
-from kubeq.kube_api._requests._api_resources_request import KubeGetApiResources
+from kubeq.kube_api._requests._api_resources_request import KubeDiscoveryRequest
 
 _v2_subclause = AcceptSubclause(
     version="v2",
@@ -21,7 +20,7 @@ _accept_for_discovery = AcceptHeader(
 
 class KubeApiResources(KubeClientBase):
 
-    async def api_resources(self, _: KubeGetApiResources):
+    async def api_resources(self, _: KubeDiscoveryRequest):
 
         core = self.send_parse(
             method="GET",
