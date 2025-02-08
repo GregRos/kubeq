@@ -2,9 +2,9 @@ from typing import Any
 from kr8s import Api
 
 from kubeq.http._client._kr8s._patched import patch_kr8s_for_sending_arbitrary_urls
-from kubeq.http._utils import Method
 
 import aioreactive as rx
+from ..._base import Method
 
 
 class PatchedApiWrapper:

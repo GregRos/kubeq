@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from kr8s import Api
 
 from kubeq.http._client._kr8s.wrapper import PatchedApiWrapper
+from ._user_agent import get_user_agent
 from kubeq.http._requests import KubeRequest
-from kubeq.http._utils import get_user_agent
 
 
 class KubeClient:

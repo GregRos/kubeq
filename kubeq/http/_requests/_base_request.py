@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from typing import Any, AsyncIterable, Iterable
 from box import Box
 from httpx import URL, QueryParams, Response
-from .._utils import AcceptHeader, Method, get_user_agent
 
-from aioreactive import rx
+from .._base import Method
+from ._helpers import AcceptHeader
 
 
 class KubeRequest[T](ABC):

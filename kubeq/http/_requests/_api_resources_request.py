@@ -8,7 +8,7 @@ from httpx import Response
 from kubeq.entities._resource._names import KubeNames
 from kubeq.entities._resource._resource import KubeResource, KubeSubResource
 from kubeq.http._requests._rx_request import KubeRxRequest
-from kubeq.http._utils import (
+from ._helpers import (
     AcceptSubclause,
     AcceptHeader,
     parse_names,
