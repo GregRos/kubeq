@@ -10,6 +10,14 @@ class KubeKind:
     version: str
     name: str
 
+    @property
+    def fqn(self):
+        parts = [self.version]
+        if self.group:
+            parts.append(self.group)
+        parts.append(self.name)
+        return "/".join(parts)
+
     @staticmethod
     def parse_object(data: Box):
         return KubeKind(
@@ -19,11 +27,7 @@ class KubeKind:
         )
 
     def __str__(self):
-        parts = [self.version]
-        if self.group:
-            parts.append(self.group)
-        parts.append(self.name)
-        return "/".join(parts)
+        return self.fqn
 
     @property
     def is_core(self):

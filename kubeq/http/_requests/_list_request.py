@@ -8,19 +8,25 @@ from httpx import QueryParams, URL
 from kubeq.http._requests._base_request import KubeRequest
 from kubeq.http._requests._helpers._accept_header import AcceptHeader
 from kubeq.http._requests._caching._cache_features import CacheFeatures
-from kubeq.http._requests._helpers._kube_selector import KubeSelector
+from kubeq.http._requests._helpers import KubeBinarySelector, KubeSelector, splat
 
 
-@dataclass
 class KubeListRequest(KubeRequest):
     http_method = "GET"
-    what: KubeResource
-    namespace: str | None
-    label_selectors: Iterable[KubeSelector]
-    field_selectors: Iterable[KubeSelector]
 
-    def __init__(self, **kwargs: Unpack[CacheFeatures]):
+    def __init__(
+        self,
+        what: KubeResource,
+        namespace: str | None = None,
+        label_selectors: Iterable[KubeBinarySelector] = (),
+        field_selectors: Iterable[KubeSelector] = (),
+        **kwargs: Unpack[CacheFeatures]
+    ):
         super().__init__(**kwargs)
+        self.what = what
+        self.namespace = namespace
+        self.label_selectors = label_selectors
+        self.field_selectors = field_selectors
 
     def url_path(self):
         parts = self.what.list_uri()
@@ -34,8 +40,8 @@ class KubeListRequest(KubeRequest):
     def url_query(self):
         return QueryParams(
             {
-                "labelSelector": KubeSelector.splat(self.label_selectors),
-                "fieldSelector": KubeSelector.splat(self.field_selectors),
+                "labelSelector": splat(self.label_selectors),
+                "fieldSelector": splat(self.field_selectors),
             }
         )
 

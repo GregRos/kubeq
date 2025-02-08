@@ -14,6 +14,10 @@ class KubeResourceBase(ABC):
     kind: KubeKind
     verbs: Verbs
 
+    @property
+    def fqn(self):
+        return self.kind.fqn
+
     def _compose_uri(self, *parts: str):
         return parts
 
@@ -23,7 +27,10 @@ class KubeResource(KubeResourceBase):
     names: KubeNames
     is_namespaced: bool
     categories: tuple[str, ...] = field(default=())
-    children: Mapping[str, "KubeSubResource"] = field(default_factory=dict)
+    kids: Mapping[str, "KubeSubResource"] = field(default_factory=dict)
+
+    def __getitem__(self, item: str) -> "KubeSubResource":
+        return self.kids[item]
 
     def list_uri(self):
         return self.kind.base_uri + (self.names.plural,)

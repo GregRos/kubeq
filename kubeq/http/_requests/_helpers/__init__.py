@@ -1,4 +1,4 @@
 from ._accept_header import AcceptHeader, AcceptSubclause
 from ._format import _from_sections, _format_kvp
-from ._kube_selector import KubeSelector
+from ._kube_selector import KubeBinarySelector, KubeSelector, KubeUnarySelector, splat
 from ._parse_stuff import parse_kind, parse_names, parse_resource, parse_subresource

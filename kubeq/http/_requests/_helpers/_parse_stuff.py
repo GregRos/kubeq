@@ -38,7 +38,7 @@ def parse_resource(res: Box):
         categories=tuple(res.get("categories", [])),
         is_namespaced=res.scope == "Namespace",
         verbs=tuple(res.get("verbs", [])),
-        children=subresources,
+        kids=subresources,
     )
     for x in subresources.values():
         x.parent = daddy

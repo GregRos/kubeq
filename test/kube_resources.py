@@ -12,7 +12,10 @@ def start():
     async def do():
 
         client = KubeClient(api())
-        res = client.send(KubeDiscoveryRequest(True))
+        pair = client.send(KubeDiscoveryRequest(True)), client.send(
+            KubeDiscoveryRequest(False)
+        )
+
         res = rx.pipe(res, rx.map(print))
         await rx.run(res)
 

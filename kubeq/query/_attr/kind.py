@@ -5,8 +5,6 @@ from kr8s.objects import APIObject
 
 from dataclasses import dataclass
 
-from kubeq.aliases._resource import APIResource
-
 
 @dataclass
 class Kind:

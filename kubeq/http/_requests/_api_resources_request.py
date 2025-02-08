@@ -32,7 +32,6 @@ _accept_for_discovery = AcceptHeader(
 )
 
 
-@dataclass
 class KubeDiscoveryRequest(KubeRxRequest[KubeResource]):
     def __init__(self, is_core_api: bool, ttl: float | None = 60 * 60):
         self.is_core_api = is_core_api

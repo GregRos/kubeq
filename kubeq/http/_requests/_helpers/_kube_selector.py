@@ -3,7 +3,7 @@ from typing import Iterable
 
 
 @dataclass
-class KubeSelector:
+class KubeBinarySelector:
     name: str
     operator: str
     value: str
@@ -11,6 +11,18 @@ class KubeSelector:
     def __str__(self):
         return f"{self.name} {self.operator} {self.value}"
 
-    @staticmethod
-    def splat(selectors: Iterable["KubeSelector"]):
-        return ",".join(str(x) for x in selectors)
+
+@dataclass
+class KubeUnarySelector:
+    name: str
+    operator: str
+
+    def __str__(self):
+        return f"{self.operator}{self.name}"
+
+
+type KubeSelector = KubeBinarySelector | KubeUnarySelector
+
+
+def splat(selectors: Iterable[KubeSelector]) -> str:
+    return ",".join(str(s) for s in selectors)
