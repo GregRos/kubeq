@@ -2,9 +2,7 @@ from asyncio import gather
 import asyncio
 from datetime import datetime
 from kr8s import api
-from kubeq.kube_api._client._http import AcceptHeader, AcceptSubclause
-from kubeq.kube_api._client._kr8s._patched import kr8s_api
-from kubeq.kube_api._client._kube_api_resources import _accept_for_discovery
+
 import yaml
 
 

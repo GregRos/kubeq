@@ -5,13 +5,13 @@ from kubeq.entities import KubeResource
 
 from httpx import QueryParams, URL
 
-from kubeq.http._requests._base_request import KubeRequestBase
+from kubeq.http._requests._base_request import KubeRequest
 from kubeq.http._utils._accept_header import AcceptHeader
 from kubeq.http._utils._kube_selector import KubeSelector
 
 
 @dataclass
-class KubeListRequest(KubeRequestBase):
+class KubeListRequest(KubeRequest):
     http_method = "GET"
     what: KubeResource
     namespace: str | None

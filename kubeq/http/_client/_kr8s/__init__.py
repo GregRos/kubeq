@@ -1,0 +1,1 @@
+from ._patched import patch_kr8s_for_sending_arbitrary_urls

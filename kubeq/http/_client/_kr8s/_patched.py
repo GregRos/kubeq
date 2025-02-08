@@ -5,7 +5,7 @@ import kubernetes
 # see [notes about this file](./client.md)
 
 
-def kr8s_api():
+def patch_kr8s_for_sending_arbitrary_urls(a: Api) -> Api:
     original_construct_url = getattr(Api, "_construct_url")
 
     def my_construct_url(
@@ -22,6 +22,5 @@ def kr8s_api():
             return url
         return original_construct_url(self, version, base, namespace, url)
 
-    a = api()
     setattr(a, "_construct_url", types.MethodType(my_construct_url, a))
     return a

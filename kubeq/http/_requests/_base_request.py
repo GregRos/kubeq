@@ -1,17 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable
+from typing import Any, AsyncIterable, Iterable
+from box import Box
 from httpx import URL, QueryParams, Response
 from .._utils import AcceptHeader, Method, get_user_agent
 
+from aioreactive import rx
 
-class KubeRequestBase[T](ABC):
+
+class KubeRequest[T](ABC):
     http_method: Method = "GET"
 
     def _url_query(self) -> QueryParams | None:
         return None
 
     @abstractmethod
-    def parse(self, response: Response) -> T: ...
+    def parse(self, response: AsyncIterable[Response]) -> T: ...
 
     @abstractmethod
     def _url_path(self) -> Iterable[str]: ...
@@ -21,15 +24,11 @@ class KubeRequestBase[T](ABC):
 
     def headers(self) -> dict[str, str]:
         return {
-            "User-Agent": self._header_user_agent(),
             "Accept": str(self._header_accept()),
         }
 
     def _payload(self) -> Any:
         return None
-
-    def _header_user_agent(self) -> str:
-        return get_user_agent()
 
     @property
     def url(self) -> URL:

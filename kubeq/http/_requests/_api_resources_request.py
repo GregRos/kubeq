@@ -15,7 +15,7 @@ from kubeq.http._utils import (
     parse_kind,
     parse_resource,
 )
-from ._base_request import KubeRequestBase
+from ._base_request import KubeRequest
 import aioreactive as rx
 
 _v2_subclause = AcceptSubclause(
@@ -33,7 +33,7 @@ _accept_for_discovery = AcceptHeader(
 
 
 @dataclass
-class KubeCoreDiscoveryRequest(KubeRxRequest):
+class KubeDiscoveryRequest(KubeRxRequest):
     def __init__(self, is_core_api: bool):
         self.is_core_api = is_core_api
 
