@@ -24,4 +24,5 @@ class KubeClient:
             headers=headers,
             payload=request._payload(),
         )
+
         return request.parse(x)

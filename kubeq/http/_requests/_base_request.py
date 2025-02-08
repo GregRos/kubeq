@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncIterable, Iterable
+from typing import Any, AsyncIterable, Awaitable, Iterable
 from box import Box
 from httpx import URL, QueryParams, Response
 
@@ -14,7 +14,7 @@ class KubeRequest[T](ABC):
         return None
 
     @abstractmethod
-    def parse(self, response: AsyncIterable[Response]) -> T: ...
+    def parse(self, response: Awaitable[Response]) -> T: ...
 
     @abstractmethod
     def _url_path(self) -> Iterable[str]: ...
@@ -32,4 +32,4 @@ class KubeRequest[T](ABC):
 
     @property
     def url(self) -> URL:
-        return URL(**{"path": self._url_path(), "query": self._url_query()})
+        return URL(**{"path": "/".join(self._url_path()), "query": self._url_query()})

@@ -27,10 +27,11 @@ class PatchedApiWrapper:
                 method=method,
                 raise_for_status=True,
                 namespace=None,
+                version="",
                 url=url,
                 headers=headers,
                 data=payload,
             ) as x:
-                yield x
+                return x
 
         return _send()

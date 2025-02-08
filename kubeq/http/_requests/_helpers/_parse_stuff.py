@@ -6,8 +6,8 @@ from kubeq.entities import KubeNames, KubeKind, KubeSubResource, KubeResource
 def parse_names(resource: Box):
     return KubeNames(
         main=resource.singularResource,
-        plural=resource.name,
-        short=tuple(resource.shortNames),
+        plural=resource.resource,
+        short=tuple(resource.get("shortNames", [])),
     )
 
 
@@ -36,9 +36,9 @@ def parse_resource(res: Box):
     daddy = KubeResource(
         names=parse_names(res),
         kind=parse_kind(res.responseKind),
-        categories=res.get("categories", []),
+        categories=tuple(res.get("categories", [])),
         is_namespaced=res.scope == "Namespace",
-        verbs=res.get("verbs", []),
+        verbs=tuple(res.get("verbs", [])),
         children=subresources,
     )
     for x in subresources.values():

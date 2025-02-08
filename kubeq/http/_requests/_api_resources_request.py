@@ -33,7 +33,7 @@ _accept_for_discovery = AcceptHeader(
 
 
 @dataclass
-class KubeDiscoveryRequest(KubeRxRequest):
+class KubeDiscoveryRequest(KubeRxRequest[KubeResource]):
     def __init__(self, is_core_api: bool):
         self.is_core_api = is_core_api
 
@@ -47,7 +47,11 @@ class KubeDiscoveryRequest(KubeRxRequest):
 
     @override
     def _parse_json_object(self, body: Box) -> rx.AsyncObservable[KubeResource]:
-        if not "versions" in body:
-            raise ValueError("Invalid discovery response, no versions!")
-        result = [parse_resource(version) for version in body.versions.resources]
+
+        result = [
+            parse_resource(resource)
+            for item in body.get("items")
+            for version in item.versions
+            for resource in version.resources
+        ]
         return rx.from_iterable(result)
