@@ -14,6 +14,9 @@ class KubeResourceBase(ABC):
     kind: KubeKind
     verbs: Verbs
 
+    def _compose_uri(self, *parts: str):
+        return parts
+
 
 @dataclass
 class KubeResource(KubeResourceBase):
@@ -22,10 +25,11 @@ class KubeResource(KubeResourceBase):
     categories: tuple[str, ...] = field(default=())
     children: Mapping[str, "KubeSubResource"] = field(default_factory=dict)
 
-    @property
-    def base_uri(self):
-        base = self.kind.base_uri
-        return "/".join([base, self.names.plural])
+    def list_uri(self):
+        return self.kind.base_uri + (self.names.plural,)
+
+    def get_uri(self, name: str):
+        return self.list_uri() + (name,)
 
 
 @dataclass
@@ -33,10 +37,8 @@ class KubeSubResource(KubeResourceBase):
     name: str
     parent: KubeResource = field(init=False, repr=False)
 
-    @staticmethod
-    def parse_subresource(res: Box):
-        return KubeSubResource(
-            name=res.subresource,
-            kind=KubeKind.parse_object(res.responseKind),
-            verbs=tuple(res.get("verbs", [])),
-        )
+    def list_uri(self, of: KubeResource | str):
+        return self.parent.list_uri() + (of, self.name)
+
+    def get_uri(self, of: KubeResource | str, name: str):
+        return self.list_uri(of) + (name,)

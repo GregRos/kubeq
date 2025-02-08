@@ -30,8 +30,7 @@ def parse_subresource(res: Box):
 def parse_resource(res: Box):
     raw_subresources = res.get("subresources", [])
     subresources: dict[str, KubeSubResource] = {
-        subres.subresource: KubeSubResource.parse_subresource(subres)
-        for subres in raw_subresources
+        subres.subresource: parse_subresource(subres) for subres in raw_subresources
     }
     daddy = KubeResource(
         names=parse_names(res),

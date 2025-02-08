@@ -32,5 +32,5 @@ class KubeKind:
     @property
     def base_uri(self):
         if self.is_core:
-            return "/".join(("api", self.version))
-        return "/".join(("apis", self.group, self.version))
+            return ("api", self.version)
+        return ("apis", self.group, self.version)
