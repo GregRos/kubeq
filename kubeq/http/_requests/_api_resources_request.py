@@ -1,8 +1,22 @@
 from dataclasses import dataclass
 from typing import Iterable, override
+from xmlrpc.client import Boolean
 
-from kubeq.kube_api._requests._base_request import KubeRequestBase
-from kubeq.kube_api._requests._utils import AcceptHeader, AcceptSubclause
+from box import Box
+from httpx import Response
+
+from kubeq.entities._resource._names import KubeNames
+from kubeq.entities._resource._resource import KubeResource, KubeSubResource
+from kubeq.http._requests._rx_request import KubeRxRequest
+from kubeq.http._utils import (
+    AcceptSubclause,
+    AcceptHeader,
+    parse_names,
+    parse_kind,
+    parse_resource,
+)
+from ._base_request import KubeRequestBase
+import aioreactive as rx
 
 _v2_subclause = AcceptSubclause(
     version="v2",
@@ -19,19 +33,21 @@ _accept_for_discovery = AcceptHeader(
 
 
 @dataclass
-class KubeCoreDiscoveryRequest(KubeRequestBase):
+class KubeCoreDiscoveryRequest(KubeRxRequest):
+    def __init__(self, is_core_api: bool):
+        self.is_core_api = is_core_api
+
     @override
-    def header_accept(self) -> AcceptHeader:
+    def _header_accept(self) -> AcceptHeader:
         return _accept_for_discovery
 
     @override
-    def url_path(self):
-        return ["api"]
-
-
-@dataclass
-class KubeExtraDiscoveryRequest(KubeCoreDiscoveryRequest):
+    def _url_path(self):
+        return ["api"] if self.is_core_api else ["apis"]
 
     @override
-    def url_path(self):
-        return ["apis"]
+    def _parse_json_object(self, body: Box) -> rx.AsyncObservable[KubeResource]:
+        if not "versions" in body:
+            raise ValueError("Invalid discovery response, no versions!")
+        result = [parse_resource(version) for version in body.versions.resources]
+        return rx.from_iterable(result)

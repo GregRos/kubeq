@@ -5,21 +5,9 @@ from kubeq.entities import KubeResource
 
 from httpx import QueryParams, URL
 
-from kubeq.kube_api._requests._base_request import KubeRequestBase
-
-
-@dataclass
-class KubeSelector:
-    name: str
-    operator: str
-    value: str
-
-    def __str__(self):
-        return f"{self.name} {self.operator} {self.value}"
-
-    @staticmethod
-    def splat(selectors: Iterable["KubeSelector"]):
-        return ",".join(str(x) for x in selectors)
+from kubeq.http._requests._base_request import KubeRequestBase
+from kubeq.http._utils._accept_header import AcceptHeader
+from kubeq.http._utils._kube_selector import KubeSelector
 
 
 @dataclass
