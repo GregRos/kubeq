@@ -6,8 +6,9 @@ from typing import Any, AsyncIterable, Awaitable, Iterable, Mapping, Unpack
 from box import Box
 from httpx import URL, QueryParams, Response
 
-from kubeq.http._requests._caching._cache_features import CacheFeatures
-from kubeq.http._requests._caching._cache_info import CacheEntry
+from kubeq.storage._info import CacheInfo
+from kubeq.storage._features import CacheFeatures
+
 
 from .._base import Method
 from ._helpers import AcceptHeader
@@ -16,8 +17,8 @@ from ._helpers import AcceptHeader
 class KubeRequest[T](ABC):
     method: Method = "GET"
 
-    def __init__(self, **kwargs: Unpack[CacheFeatures]):
-        self.caching = kwargs
+    def __init__(self, **cache_features: Unpack[CacheFeatures]):
+        self._features = cache_features
 
     def _url_query(self) -> QueryParams | None:
         return None
@@ -28,15 +29,16 @@ class KubeRequest[T](ABC):
     @abstractmethod
     def _url_path(self) -> Iterable[str]: ...
 
-    def _header_accept(self) -> AcceptHeader:
+    @property
+    def header_accept(self) -> AcceptHeader:
         return AcceptHeader("application/json")
 
     def headers(self) -> dict[str, str]:
         return {
-            "Accept": str(self._header_accept()),
+            "Accept": str(self.header_accept),
         }
 
-    def __cache__(self) -> CacheEntry | None:
+    def __acache__(self) -> CacheInfo | None:
         if self.method != "GET":
             return None
         everything = Box(
@@ -45,8 +47,8 @@ class KubeRequest[T](ABC):
             headers=self.headers(),
         ).to_dict()
         request_json = json.dumps(everything, sort_keys=True)
-        key = f"{self.__class__.__name__}_HTTP_{sha256(request_json.encode()).hexdigest()}"
-        return CacheEntry(key, **self.caching)
+        key = sha256(request_json.encode()).hexdigest()
+        return CacheInfo(key, self, **self._features)
 
     def _payload(self) -> Any:
         return None
@@ -55,7 +57,7 @@ class KubeRequest[T](ABC):
         return ()
 
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}{self._args()}"
+        return self.__acache__().__str__()
 
     @property
     def url(self) -> URL:

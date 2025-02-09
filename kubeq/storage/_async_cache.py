@@ -6,6 +6,10 @@ from diskcache import Cache
 from httpx import Response
 
 from kubeq.logging import sources
+from kubeq.storage._info import CacheInfo
+from kubeq.storage._features import CacheFeatures
+from kubeq.storage._entry import CacheEntry
+from kubeq.utils._custom_dunder import dunder_invoker
 
 logger = sources.cache.logger
 
@@ -22,20 +26,77 @@ class AsyncCache:
 
         return await get_event_loop().run_in_executor(self._thread_pool, _run)
 
-    async def get(self, key: str, **kwargs: Any):
+    def _get_info(self, key: object) -> CacheInfo | None:
+        info = CacheInfo.from_(key)
+        if not info:
+            logger.debug(f"MISSING INFO: {str(key)}")
+            return None
+        return info
+
+    def _get_entry(self, key: object) -> CacheEntry | None:
+        info = self._get_info(key)
+        if not info:
+            return None
+
+    async def delete(self, key: object) -> bool:
+        info = self._get_info(key)
+        if not info:
+            return False
+
+        logger.debug(f"DELETING: {str(info)}")
+
+        def _delete(cache: Cache):
+            cache.pop(info.key, None)
+
+        await self._run_async(_delete)
+        return True
+
+    async def get(self, key: object) -> Any | None:
+        info = self._get_info(key)
+        if not info:
+            return None
+        if info.features.get("force_cache", False):
+            logger.debug(f"CACHE FORCED: {str(info)}")
+            await self.delete(key)
+            return None
+
         def _get(cache: Cache):
-            result = cache.get(key, **kwargs)
-            if result:
-                logger.debug(f"Cache hit for {key}")
+            entry: CacheEntry | None = cache.get(info.key)  # type: ignore
+            if entry:
+                logger.debug("HIT: %s", entry)
+                return entry.value
             else:
-                logger.debug(f"Cache miss for {key}")
-            return result
+                logger.debug("MISS: %s", key)
+                return None
 
         return await self._run_async(_get)
 
-    async def set(self, key: str, value: Any, *, ttl: float) -> None:
+    async def store(
+        self,
+        key: object,
+        value: Any,
+        /,
+        **features: Unpack[CacheFeatures],
+    ) -> bool:
+        entry = CacheEntry.from_(key, value, **features)
+        if not entry:
+            return False
+        if entry.features.get("no_cache", False):
+            return False
+
         def _set(cache: Cache):
-            logger.debug("Storing"
-            cache.set(key, value, expire=ttl)
+
+            cache.set(
+                entry.key,
+                entry,
+                expire=features.get("ttl", None),
+            )
+            logger.debug(
+                f"STORED: {entry.info}",
+                {
+                    "value": str(entry.value),
+                },
+            )
 
         await self._run_async(_set)
+        return True

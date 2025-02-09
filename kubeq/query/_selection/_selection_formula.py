@@ -5,8 +5,6 @@ from kubeq.query._selection import Selector
 import kubeq.query._attr as attrs
 import kubeq.query._operators as oprs
 
-from kubeq.utils.dict import keys_of_type
-
 
 class SelectionFormula(Mapping[attrs.Any, oprs.Op]):
 

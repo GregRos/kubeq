@@ -7,8 +7,8 @@ from httpx import Response
 
 from kubeq.entities._resource._names import KubeNames
 from kubeq.entities._resource._resource import KubeResource, KubeSubResource
-from kubeq.http._requests._caching._cache_features import CacheFeatures
 from kubeq.http._requests._rx_request import KubeRxRequest
+from kubeq.storage._features import CacheFeatures
 from ._helpers import (
     AcceptSubclause,
     AcceptHeader,
@@ -38,8 +38,9 @@ class KubeDiscoveryRequest(KubeRxRequest[KubeResource]):
         super().__init__(**caching)
         self.is_core_api = is_core_api
 
+    @property
     @override
-    def _header_accept(self) -> AcceptHeader:
+    def header_accept(self) -> AcceptHeader:
         return _accept_for_discovery
 
     @override

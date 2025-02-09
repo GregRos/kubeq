@@ -20,8 +20,8 @@ def start():
 
         client = KubeClient(api())
         reqs = [
-            KubeDiscoveryRequest(True, cache_ttl=50),
-            KubeDiscoveryRequest(False, cache_ttl=50),
+            KubeDiscoveryRequest(True, cache_ttl=50, cache_force=True),
+            KubeDiscoveryRequest(False, cache_ttl=50, cache_force=True),
         ]
 
         res = await rx.pipe(

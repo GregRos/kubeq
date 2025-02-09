@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterable, Unpack
+from typing import Iterable, Unpack, override
 
 from kubeq.entities import KubeResource
 
@@ -7,8 +7,8 @@ from httpx import QueryParams, URL
 
 from kubeq.http._requests._base_request import KubeRequest
 from kubeq.http._requests._helpers._accept_header import AcceptHeader
-from kubeq.http._requests._caching._cache_features import CacheFeatures
 from kubeq.http._requests._helpers import KubeBinarySelector, KubeSelector, splat
+from kubeq.storage._features import CacheFeatures
 
 
 class KubeListRequest(KubeRequest):
@@ -45,5 +45,7 @@ class KubeListRequest(KubeRequest):
             }
         )
 
+    @property
+    @override
     def header_accept(self):
         return AcceptHeader("application/json")

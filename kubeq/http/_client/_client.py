@@ -22,28 +22,34 @@ class KubeClient:
         return get_user_agent()
 
     async def _do_send(self, request: KubeRequest) -> Response:
-        cache_info = request.__cache__()
-        response: Response | None = None
-        logger.debug(f"Received request: {request}")
-        if cache_info:
-            key = cache_info.key
-            cached: Response = await self._cache.get(key, default=None)  # type: ignore
-            if cached:
-                response = cached
+
+        response: Response | None = await self._cache.get(request)
+
         if not response:
             url = request.url
             headers = request.headers()
             headers.update({"User-Agent": self._header_user_agent()})
+            log_url = f"/{url.path}"
+            logger.info(
+                f"Making k8s API request {str(request)}",
+                {
+                    "Endpoint": f"{request.method} {log_url}",
+                    "Accept": str(request.header_accept),
+                },
+            )
             response = await self._api.send(
                 method=request.method,
                 url=str(url),
                 headers=headers,
                 payload=request._payload(),
             )
-            if cache_info and not cache_info.features.get("cache_skip", None):
-                await self._cache.set(
-                    cache_info.key, response, ttl=cache_info.features["cache_ttl"]
-                )
+            logger.info(
+                f"Received response {request.method} {log_url}",
+                {
+                    "Accept": str(request.header_accept),
+                },
+            )
+            await self._cache.store(request, response)
 
         return response
 
