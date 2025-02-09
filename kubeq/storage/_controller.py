@@ -3,6 +3,8 @@ from pathlib import Path
 
 from diskcache import Cache
 
+from kubeq.storage._async_cache import AsyncCache
+
 
 class _KubeqStorageController:
     @functools.cached_property
@@ -15,7 +17,8 @@ class _KubeqStorageController:
 
     @functools.cached_property
     def cache(self):
-        return Cache(directory=str(self._cache_dir))
+        c = Cache(directory=str(self._cache_dir))
+        return AsyncCache(c)
 
 
 Storage = _KubeqStorageController(Path.home() / ".kubeq")

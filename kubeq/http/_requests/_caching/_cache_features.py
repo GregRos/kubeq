@@ -4,5 +4,5 @@ from typing import NotRequired, TypedDict
 
 class CacheFeatures(TypedDict):
     cache_ttl: float
-    cache_force: bool
-    cache_skip: bool
+    cache_force: NotRequired[bool]
+    cache_skip: NotRequired[bool]

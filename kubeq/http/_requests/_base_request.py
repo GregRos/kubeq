@@ -23,10 +23,7 @@ class KubeRequest[T](ABC):
         return None
 
     @abstractmethod
-    def parse(self, response: Response) -> T: ...
-
-    @abstractmethod
-    def _cache_ttl(self) -> float | None: ...
+    def parse(self, response: Awaitable[Response]) -> T: ...
 
     @abstractmethod
     def _url_path(self) -> Iterable[str]: ...
@@ -39,20 +36,26 @@ class KubeRequest[T](ABC):
             "Accept": str(self._header_accept()),
         }
 
-    def __cache_key__(self) -> CacheEntry | None:
+    def __cache__(self) -> CacheEntry | None:
         if self.method != "GET":
             return None
         everything = Box(
             method=self.method,
-            url=self.url,
+            url=str(self.url),
             headers=self.headers(),
         ).to_dict()
         request_json = json.dumps(everything, sort_keys=True)
-        key = f"HTTP_{sha256(request_json.encode()).hexdigest()}"
+        key = f"{self.__class__.__name__}_HTTP_{sha256(request_json.encode()).hexdigest()}"
         return CacheEntry(key, **self.caching)
 
     def _payload(self) -> Any:
         return None
+
+    def _args(self):
+        return ()
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}{self._args()}"
 
     @property
     def url(self) -> URL:

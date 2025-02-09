@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterable, override
+from typing import Iterable, Unpack, override
 from xmlrpc.client import Boolean
 
 from box import Box
@@ -7,6 +7,7 @@ from httpx import Response
 
 from kubeq.entities._resource._names import KubeNames
 from kubeq.entities._resource._resource import KubeResource, KubeSubResource
+from kubeq.http._requests._caching._cache_features import CacheFeatures
 from kubeq.http._requests._rx_request import KubeRxRequest
 from ._helpers import (
     AcceptSubclause,
@@ -33,17 +34,13 @@ _accept_for_discovery = AcceptHeader(
 
 
 class KubeDiscoveryRequest(KubeRxRequest[KubeResource]):
-    def __init__(self, is_core_api: bool, ttl: float | None = 60 * 60):
+    def __init__(self, is_core_api: bool, **caching: Unpack[CacheFeatures]):
+        super().__init__(**caching)
         self.is_core_api = is_core_api
-        self.ttl = ttl
 
     @override
     def _header_accept(self) -> AcceptHeader:
         return _accept_for_discovery
-
-    @override
-    def _cache_ttl(self) -> float | None:
-        return self.ttl
 
     @override
     def _url_path(self):
