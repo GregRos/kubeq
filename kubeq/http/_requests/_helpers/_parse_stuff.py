@@ -46,7 +46,7 @@ def parse_resource(res: Box, ctx: ResourceCtx):
         names=parse_names(res),
         kind=parse_kind(res.responseKind, ctx),
         categories=tuple(res.get("categories", [])),
-        is_namespaced=res.scope == "Namespaced",
+        is_cluster=res.scope != "Namespaced",
         verbs=tuple(res.get("verbs", [])),
         kids=subresources,
     )

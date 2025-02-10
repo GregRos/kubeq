@@ -1,8 +1,9 @@
 import functools
 from typing import Iterable
 from rich import print, box
-from rich.table import Table, Column
-
+from rich.table import Table, Column, Row
+from rich.text import Text
+from rich.style import Style
 from kubeq.entities._resource._resource import KubeResource
 from kubeq.entities._resource._sub_resource import KubeSubResource
 from kubeq.entities._resource._verbs import KubeVerb
@@ -40,6 +41,34 @@ class Table_RDB:
         for verb_name, verb_repr in all_verbs.items():
             yield verb_repr.emoji if verb_name in verb_set else ""
 
+    @staticmethod
+    def _resource_style(r: KubeResource):
+        match r.classify:
+            case "core":
+                s = Style(color="green")
+            case "builtin":
+                s = Style(color="blue")
+            case "k8s":
+                s = Style(color="cyan")
+            case "custom":
+                s = Style(color="purple", italic=True)
+            case _:
+                s = Style(color="purple")
+        if r.is_cluster:
+            s += Style(bold=True)
+        return s
+
+    @classmethod
+    def _scope_str(cls, resource: KubeResource):
+        if not resource.is_cluster:
+            return "ᴺ"
+        return "ᶜ"
+
+    @classmethod
+    def _resource_ident(cls, resource: KubeResource):
+        txt = f"{cls._scope_str(resource)} {resource.ident}"
+        return Text(txt, style=cls._resource_style(resource))
+
     @classmethod
     def _resource_row(cls, resource: KubeResource):
         match resource.names.short:  # SH
@@ -48,7 +77,7 @@ class Table_RDB:
             case [x, *_]:
                 yield x
 
-        yield resource.ident  # KIND
+        yield cls._resource_ident(resource)  # KIND
         yield from cls._get_verbs_row(resource.verbs)
         yield resource.kind.parent  # VERSION
 

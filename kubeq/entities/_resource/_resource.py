@@ -16,9 +16,13 @@ from ._names import KubeNames
 class KubeResource(KubeResourceBase):
     kind: KubeKind
     names: KubeNames
-    is_namespaced: bool
+    is_cluster: bool
     categories: tuple[str, ...] = field(default=())
     kids: Mapping[str, "KubeSubResource"] = field(default_factory=dict, repr=False)
+
+    @property
+    def classify(self):
+        return self.kind.classify
 
     @property
     def ident(self):

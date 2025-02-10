@@ -31,7 +31,7 @@ class KubeListRequest(KubeRequest):
     def url_path(self):
         parts = self.what.list_uri()
         if self.namespace:
-            assert self.what.is_namespaced, "Resource is not namespaced!"
+            assert self.what.is_cluster, "Resource is not namespaced!"
             parts += ("namespaces", self.namespace)
 
         parts += (self.what.names.plural,)

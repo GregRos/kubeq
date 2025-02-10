@@ -13,7 +13,6 @@ from kubeq.logging import setup_logging
 from kubeq.utils import rxq
 import pprint
 
-from kubeq.viz._print_rdb import print_rdb
 from rich.console import Console
 
 from kubeq.viz._rdb._table import Table_RDB

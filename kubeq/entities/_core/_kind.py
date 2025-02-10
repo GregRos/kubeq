@@ -3,7 +3,7 @@ from typing import Literal
 
 from box import Box
 
-type ResourceClass = Literal["core", "builtin", "extension", "custom"]
+type ResourceClass = Literal["core", "builtin", "k8s", "custom"]
 
 
 @dataclass
@@ -22,14 +22,14 @@ class KubeKind:
         return "/".join(parts)
 
     @property
-    def classify(self):
+    def classify(self) -> ResourceClass:
         match self.version, self.group:
             case "v1" | "", "":
                 return "core"
             case _, grp if "." not in grp:
                 return "builtin"
             case _, grp if grp.endswith(".k8s.io"):
-                return "extension"
+                return "k8s"
             case _:
                 return "custom"
 
