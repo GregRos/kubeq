@@ -3,7 +3,7 @@ from typing import Literal
 
 from box import Box
 
-type ResourceOrigin = Literal["core", "builtin", "custom"]
+type ResourceClass = Literal["core", "builtin", "extension", "custom"]
 
 
 @dataclass
@@ -22,6 +22,18 @@ class KubeKind:
         return "/".join(parts)
 
     @property
+    def classify(self):
+        match self.version, self.group:
+            case "v1" | "", "":
+                return "core"
+            case _, grp if "." not in grp:
+                return "builtin"
+            case _, grp if grp.endswith(".k8s.io"):
+                return "extension"
+            case _:
+                return "custom"
+
+    @property
     def parent(self):
         [*parent, name] = self.fqn.split("/")
         return "/".join(parent)
@@ -38,7 +50,7 @@ class KubeKind:
         return self.fqn
 
     @property
-    def origin(self) -> ResourceOrigin:
+    def origin(self) -> ResourceClass:
         match self.version, self.group:
             case "v1", "":
                 return "core"
@@ -52,3 +64,25 @@ class KubeKind:
         if self.origin == "core":
             return ("api", self.version)
         return ("apis", self.group, self.version)
+
+    @property
+    def is_core(self):
+        return self.origin == "core"
+
+    @property
+    def is_builtin(self):
+        match self.origin:
+            case "core" | "builtin":
+                return True
+        return False
+
+    @property
+    def is_k8s(self):
+        match self.origin:
+            case "core" | "builtin" | "extension":
+                return True
+        return False
+
+    @property
+    def is_external(self):
+        return not self.is_k8s

@@ -14,9 +14,14 @@ from kubeq.utils import rxq
 import pprint
 
 from kubeq.viz._print_rdb import print_rdb
+from rich.console import Console
+
+from kubeq.viz._rdb._table import Table_RDB
 
 setup_logging(minLevel=logging.DEBUG)
 import aioreactive
+
+c = Console()
 
 
 def start():
@@ -36,6 +41,7 @@ def start():
         )
 
         resources = KubeResourceDB(res)
-        print_rdb(resources)
+        table = Table_RDB(resources)
+        c.print(table)
 
     asyncio.run(do())

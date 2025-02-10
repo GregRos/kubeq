@@ -5,30 +5,26 @@ from rich.table import Table, Column
 
 from kubeq.entities._resource._resource import KubeResource
 from kubeq.entities._resource._sub_resource import KubeSubResource
-from ._verbs import verbs
+from kubeq.entities._resource._verbs import KubeVerb
+from ._verbs import all_verbs
 
 
-class Print_RDB:
-    def __init__(self, input: Iterable[KubeResource]):
+class Table_RDB:
+    def __init__(
+        self, input: Iterable[KubeResource], /, subresource_rows: bool = False
+    ):
         self.input = [*input]
+        self.subresource_rows = subresource_rows
 
-    @functools.cached_property
-    def columns(self):
-        yield Column(
-            header="SH",
-            footer="SH",
-            max_width=4,
-            justify="center",
-        )
+    @classmethod
+    @functools.cache
+    def columns(cls):
+        yield Column(header="SH", footer="SH", max_width=4, justify="center")
         yield Column(
             header="KIND",
             footer="KIND",
         )
-        yield Column(
-            header="VERSION",
-            footer="VERSION",
-        )
-        for verb in verbs.values():
+        for verb in all_verbs.values():
             yield Column(
                 header=verb.short,
                 footer=verb.short,
@@ -36,8 +32,16 @@ class Print_RDB:
                 width=2,
                 no_wrap=True,
             )
+        yield Column(header="VERSION", footer="VERSION")
 
-    def _resource_row(self, resource: KubeResource):
+    @classmethod
+    def _get_verbs_row(cls, verb_list: Iterable[KubeVerb]):
+        verb_set = set(verb_list)
+        for verb_name, verb_repr in all_verbs.items():
+            yield verb_repr.emoji if verb_name in verb_set else ""
+
+    @classmethod
+    def _resource_row(cls, resource: KubeResource):
         match resource.names.short:  # SH
             case []:
                 yield ""
@@ -45,29 +49,30 @@ class Print_RDB:
                 yield x
 
         yield resource.ident  # KIND
-        for verb in verbs.values():
-            yield verb.short if verb.name in resource.verbs else ""  # VERBS
+        yield from cls._get_verbs_row(resource.verbs)
         yield resource.kind.parent  # VERSION
 
-    def _subresource_row(self, sub: KubeSubResource):
+    @classmethod
+    def _subresource_row(cls, sub: KubeSubResource):
         yield ""  # SH
         yield f"  ⤷ {sub.name}"  # KIND
-        for verb in verbs.values():
-            yield verb.short if verb.name in sub.verbs else ""  # VERBS
+        yield from cls._get_verbs_row(sub.verbs)  # VERBS
         yield sub.kind.parent  # VERSION
 
-    def render(self):
+    def __rich__(self):
         table = Table(
             title="Known Resources",
             caption_justify="center",
             padding=(0, 1),
             box=None,
             border_style="bright_black",
+            footer_style="bright_black",
         )
-        table.columns.extend(self.columns)
+        table.columns.extend(self.columns())
         for resource in self.input:
             table.add_row(*self._resource_row(resource))
-            for sub in resource.kids.values():
-                table.add_row(*self._subresource_row(sub))
+            if self.subresource_rows:
+                for sub in resource.kids.values():
+                    table.add_row(*self._subresource_row(sub))
 
         return table

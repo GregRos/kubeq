@@ -1,1 +1,1 @@
-from ._table import Print_RDB
+from ._table import Table_RDB
