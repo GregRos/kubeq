@@ -7,5 +7,6 @@ cache = _base_source.LogSource("kubeq.cache", "🗃️ ")
 simplifier = _base_source.LogSource("kubeq.simplifier", "🗜️")
 cli = _base_source.LogSource("kubeq.cli", "🖥️")
 
+r_db = _base_source.LogSource("kubeq.rdb", "📚")
 cli.logger.debug("Logging initialized")
 del _base_source

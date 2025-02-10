@@ -5,8 +5,10 @@ from xmlrpc.client import Boolean
 from box import Box
 from httpx import Response
 
+from kubeq.entities._resource._sub_resource import KubeSubResource
 from kubeq.entities._resource._names import KubeNames
-from kubeq.entities._resource._resource import KubeResource, KubeSubResource
+from kubeq.entities._resource._resource import KubeResource
+from kubeq.http._requests._helpers._parse_stuff import ResourceCtx
 from kubeq.http._requests._rx_request import KubeRxRequest
 from kubeq.storage._features import CacheFeatures
 from ._helpers import (
@@ -49,11 +51,13 @@ class KubeDiscoveryRequest(KubeRxRequest[KubeResource]):
 
     @override
     def _parse_json_object(self, body: Box) -> rx.AsyncObservable[KubeResource]:
+        def _iter():
+            for item in body.get("items"):
+                group = item.metadata.get("name", None)
+                for version_box in item.versions:
+                    version = version_box.version
+                    for resource in version_box.resources:
+                        ctx = ResourceCtx(version, group)
+                        yield parse_resource(resource, ctx)
 
-        result = [
-            parse_resource(resource)
-            for item in body.get("items")
-            for version in item.versions
-            for resource in version.resources
-        ]
-        return rx.from_iterable(result)
+        return rx.from_iterable([*_iter()])

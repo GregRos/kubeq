@@ -55,7 +55,7 @@ class AsyncCache:
         info = self._get_info(key)
         if not info:
             return None
-        if info.features.get("force_cache", False):
+        if info.features.get("cache_force", False):
             logger.debug(f"CACHE FORCED: {str(info)}")
             await self.delete(key)
             return None
@@ -63,10 +63,20 @@ class AsyncCache:
         def _get(cache: Cache):
             entry: CacheEntry | None = cache.get(info.key)  # type: ignore
             if entry:
-                logger.debug("HIT: %s", entry)
+                logger.debug(
+                    f"HIT: {str(info)}",
+                    {
+                        "value": str(entry.value),
+                    },
+                )
                 return entry.value
             else:
-                logger.debug("MISS: %s", key)
+                logger.debug(
+                    f"MISS: {str(info)}",
+                    {
+                        "value": None,
+                    },
+                )
                 return None
 
         return await self._run_async(_get)
