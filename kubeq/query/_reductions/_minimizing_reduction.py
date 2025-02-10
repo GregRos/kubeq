@@ -1,23 +1,36 @@
+from abc import abstractmethod
+from typing import Callable
 from kubeq.query._utils.render_op import print_operator
 from kubeq.query._operators import *
-from ._base_reduction import BaseReduction
-from ._to_messy_dnf import To_Messy_Dnf, assert_dnf
+from ._base_reduction import BaseReducers
 from ._squash_leaf_ops import Squash_Leaf_Ops
 from ._prune_squash_bools import Prune_Squash_Bools
 from ._nullary_terms_to_prims import Nullary_Terms_To_Prims
 
 
-class To_Minimal_Dnf(BaseReduction):
+class MinimizingReduction(BaseReducers):
 
-    def __init__(self, max_iterations: int = 10, normalize_operators: bool = True):
+    def __init__(
+        self,
+        max_iterations: int = 10,
+        normalize_ops=True,
+    ):
         self.max_iterations = max_iterations
+        self.normalize_ops = normalize_ops
+
+    @abstractmethod
+    def make_reducer(self) -> BaseReducers: ...
+
+    @abstractmethod
+    def cleanup(self, op: Op) -> None: ...
 
     def simplify_squash_until_done(self, op: Op) -> Op:
-        squash_leaf_ops = Squash_Leaf_Ops()
-        nullary_terms_to_prims = Nullary_Terms_To_Prims()
-        prune_squash_bools = Prune_Squash_Bools()
+
         iterations = 0
         while True:
+            squash_leaf_ops = Squash_Leaf_Ops(normalize_operators=self.normalize_ops)
+            nullary_terms_to_prims = Nullary_Terms_To_Prims()
+            prune_squash_bools = Prune_Squash_Bools()
             op = squash_leaf_ops.reduce(op)
             op = nullary_terms_to_prims.reduce(op)
             op = prune_squash_bools.reduce(op)
@@ -33,19 +46,13 @@ class To_Minimal_Dnf(BaseReduction):
 
     def reduce(self, op: Op) -> Op:
 
-        to_messy_dnf = To_Messy_Dnf()
         print_operator("input", op)
         op = self.simplify_squash_until_done(op)
         print_operator("pre-squash", op)
-
-        messy_dnf = to_messy_dnf.reduce(op)
+        reducer_instance = self.make_reducer()
+        messy_dnf = reducer_instance.reduce(op)
         print_operator("post-dnf", op)
         op = self.simplify_squash_until_done(messy_dnf)
         print_operator("post-squash", op)
-        assert_dnf(op)
+        self.cleanup(op)
         return op
-
-
-def to_minimal_dnf(s: Op) -> Op:
-    reducer = To_Minimal_Dnf()
-    return reducer.reduce(s)

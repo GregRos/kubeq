@@ -5,7 +5,7 @@ from kubeq.query import *
 
 def start():
     oprs._boolean.And()
-    lots = (
+    r = (
         Eq("1")
         .and_(Eq("3"), In("2", "4"))
         .or_(NotIn("5", "6"))
@@ -13,6 +13,7 @@ def start():
         .or_(NotGlob("*.py"))
         .and_(Eq("7").or_(Eq("1"), Eq("5"), Eq("10")))
     )
-    lots = red.to_minimal_dnf(lots)
+    dnf = red.Minimizing_Dnf()
+    r = dnf.reduce(r)
 
-    print(render_operator(lots))
+    print(render_operator(r))

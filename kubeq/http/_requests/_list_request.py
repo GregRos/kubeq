@@ -7,7 +7,7 @@ from httpx import QueryParams, URL
 
 from kubeq.http._requests._base_request import KubeRequest
 from kubeq.http._requests._helpers._accept_header import AcceptHeader
-from kubeq.http._requests._helpers import KubeBinarySelector, KubeSelector, splat
+from kubeq.http._requests._helpers import KubeBinSelector, KubeSelector, splat
 from kubeq.storage._features import CacheFeatures
 
 
@@ -18,7 +18,7 @@ class KubeListRequest(KubeRequest):
         self,
         what: KubeResource,
         namespace: str | None = None,
-        label_selectors: Iterable[KubeBinarySelector] = (),
+        label_selectors: Iterable[KubeBinSelector] = (),
         field_selectors: Iterable[KubeSelector] = (),
         **kwargs: Unpack[CacheFeatures]
     ):

@@ -8,5 +8,8 @@ simplifier = _base_source.LogSource("kubeq.simplifier", "🗜️")
 cli = _base_source.LogSource("kubeq.cli", "🖥️")
 
 r_db = _base_source.LogSource("kubeq.rdb", "📚")
+
+
+query_d = _base_source.LogSource("kubeq.query_decider", "🔍")
 cli.logger.debug("Logging initialized")
 del _base_source

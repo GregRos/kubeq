@@ -1,12 +1,15 @@
 from aioreactive import AsyncObservable, filter_async, pipe, filter
 from kr8s.objects import APIObject
 from kubeq.query import *
+from kubeq.query._selection._instance_selector import InstanceSelector
 
 
 class ObjectFilter:
     input: AsyncObservable[APIObject]
 
-    def __init__(self, input: AsyncObservable[APIObject], selectors: list[Selector]):
+    def __init__(
+        self, input: AsyncObservable[APIObject], selectors: list[InstanceSelector]
+    ):
         self.input = input
         self.selectors = selectors
 

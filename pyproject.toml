@@ -28,6 +28,7 @@ rich = "^13.9.4"
 
 [tool.poetry.scripts]
 test = "test.kube_resources:start"
+test_operators = "test.operators:start"
 start = "kubeq.main:start"
 [build-system]
 requires = ["poetry-core"]

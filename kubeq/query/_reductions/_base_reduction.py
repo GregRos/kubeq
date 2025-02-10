@@ -3,7 +3,7 @@ from abc import ABC
 from kubeq.query._operators import *
 
 
-class BaseReduction(ABC):
+class BaseReducers(ABC):
     reductions = 0
 
     def increment(self):
@@ -16,3 +16,14 @@ class BaseReduction(ABC):
         self.reductions = 0
 
     def reduce(self, op: Op) -> Op: ...
+
+
+class ComboReduction(BaseReducers):
+    def __init__(self, *reducers: BaseReducers):
+        self.reducers = reducers
+
+    def reduce(self, op: Op) -> Op:
+        for reduction in self.reducers:
+            reduction.reduce(op)
+            self.reductions += reduction.reductions
+        return op

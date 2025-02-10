@@ -50,6 +50,10 @@ class KubeResourceDB:
     def resource(self, name: str) -> KubeResource:
         return self._by_name[name]
 
+    @property
+    def resources(self) -> Iterable[KubeResource]:
+        return self._list
+
     def subresource(self, parent: str, kid: str) -> KubeSubResource:
         resource = self.resource(parent)
         return resource[kid]

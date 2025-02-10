@@ -1,8 +1,8 @@
 from kubeq.query._operators import *
-from ._base_reduction import BaseReduction
+from ._base_reduction import BaseReducers
 
 
-class Nullary_Terms_To_Prims(BaseReduction):
+class Nullary_Terms_To_Prims(BaseReducers):
 
     def reduce(self, op: Op) -> Op:
 

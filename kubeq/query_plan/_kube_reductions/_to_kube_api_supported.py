@@ -1,8 +1,9 @@
 from kubeq.query import *
-from kubeq.query._reductions._base_reduction import BaseReduction
+from kubeq.query._reductions._base_reduction import BaseReducers
+from kubeq.query._reductions._minimizing_reduction import MinimizingReduction
 
 
-class To_Kube_Api_Supported(BaseReduction):
+class To_Kube_Api_Supported(BaseReducers):
     def __init__(self, attr: attrs.Any):
         self.attr = attr
         super().__init__()
@@ -40,5 +41,10 @@ class To_Kube_Api_Supported(BaseReduction):
                 return r
 
 
-def to_kube_api_supported(x: oprs.Op, attr: attrs.Any) -> oprs.Op:
-    return To_Kube_Api_Supported(attr).reduce(x)
+class Min_To_Kube_Api_Supported(MinimizingReduction):
+    def __init__(self, attr: attrs.Any):
+        self.attr = attr
+        super().__init__(normalize_ops=False)
+
+    def make_reducer(self) -> BaseReducers:
+        
