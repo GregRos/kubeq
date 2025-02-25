@@ -7,3 +7,6 @@ class Never(Primitive):
 
     def __eq__(self, other):
         return isinstance(other, Never)
+
+    def __repr__(self):
+        return "※"
