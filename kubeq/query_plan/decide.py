@@ -12,11 +12,7 @@ from kubeq.query._attr.kind import Kind
 import aioreactive as rx
 
 from kubeq.query._attr.label import Label
-from kubeq.query._selection._squash import (
-    SelectorSquash,
-    SquashedSelectors,
-    squash_selectors,
-)
+
 from kubeq.query_plan._kube_reductions._to_kube_api_supported import (
     Min_To_Kube_Api_Supported,
 )

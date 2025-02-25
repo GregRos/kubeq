@@ -11,4 +11,4 @@ class In(MultiValueOp, value_type=set[str]):
         return what in self.value
 
     def __repr__(self) -> str:
-        return f"in({",".join(self.value)})"
+        return f"in({", ".join(self.value)})"

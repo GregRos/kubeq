@@ -8,8 +8,6 @@ from kubeq.query import _operators as oprs
 
 from dataclasses import dataclass
 
-from kubeq.query._selection._instance_selector import InstanceSelector
-
 
 @dataclass
 class KindSelector:
@@ -18,3 +16,6 @@ class KindSelector:
 
     def __call__(self, object: KubeResource) -> bool:
         return self.operator(self.attr.get(object))
+
+    def __repr__(self) -> str:
+        return f"[{self.operator}]"
