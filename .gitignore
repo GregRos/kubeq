@@ -305,3 +305,4 @@ cython_debug/
 secrets
 config/foundryvtt
 commands/restic-sky
+.out/
