@@ -61,4 +61,9 @@ class KubeRequest[T](ABC):
 
     @property
     def url(self) -> URL:
-        return URL(**{"path": "/".join(self._url_path()), "query": self._url_query()})
+        return URL(
+            **{
+                "path": "/".join(self._url_path()),
+                "query": str(self._url_query()).encode("utf8"),
+            }
+        )

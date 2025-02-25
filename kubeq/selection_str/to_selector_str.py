@@ -2,7 +2,7 @@ from kubeq.query import *
 
 
 from kubeq.query._selection._instance_selector import InstanceSelector
-from kubeq.selection_str.op_to_str import format_op
+from kubeq.query_plan.op_to_str import selector_to_kube_api
 
 
 def _validated_selector(sel: InstanceSelector):
@@ -22,5 +22,5 @@ def to_selector_str(selector: InstanceSelector) -> str:
     and_form = _validated_selector(selector)
     strs = []
     for op in and_form.operands:
-        strs.append(format_op(selector.attr, op))
+        strs.append(selector_to_kube_api(selector.attr, op))
     return ",".join(strs)

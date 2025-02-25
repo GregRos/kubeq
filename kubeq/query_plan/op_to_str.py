@@ -10,7 +10,7 @@ def _format_in_list(vals: Iterable[str]):
     return f"({",".join(vals)})"
 
 
-def format_op(attr: attrs.Any, op: oprs.Op):
+def selector_to_kube_api(attr: attrs.Any, op: oprs.Op):
     match op:
         case oprs.In(values):
             return KubeBinSelector(attr.name, "in", _format_in_list(values))

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Callable
 from kubeq.query._utils.render_op import print_operator
 from kubeq.query._operators import *
-from ._base_reduction import BaseReducers
+from ._base_reduction import BaseReducers, ComboReduction
 from ._squash_leaf_ops import Squash_Leaf_Ops
 from ._prune_squash_bools import Prune_Squash_Bools
 from ._nullary_terms_to_prims import Nullary_Terms_To_Prims
@@ -24,21 +24,20 @@ class MinimizingReduction(BaseReducers):
     @abstractmethod
     def cleanup(self, op: Op) -> None: ...
 
+    def _make_combo(self):
+        return ComboReduction(
+            Squash_Leaf_Ops(normalize_operators=self.normalize_ops),
+            Nullary_Terms_To_Prims(),
+            Prune_Squash_Bools(),
+        )
+
     def simplify_squash_until_done(self, op: Op) -> Op:
 
         iterations = 0
         while True:
-            squash_leaf_ops = Squash_Leaf_Ops(normalize_operators=self.normalize_ops)
-            nullary_terms_to_prims = Nullary_Terms_To_Prims()
-            prune_squash_bools = Prune_Squash_Bools()
-            op = squash_leaf_ops.reduce(op)
-            op = nullary_terms_to_prims.reduce(op)
-            op = prune_squash_bools.reduce(op)
-            vector = tuple(
-                x.reductions
-                for x in [squash_leaf_ops, nullary_terms_to_prims, prune_squash_bools]
-            )
-            if vector == (0, 0, 0):
+            combo = self._make_combo()
+            op = combo.reduce(op)
+            if combo.reductions == 0:
                 return op
             iterations += 1
             if iterations > self.max_iterations:

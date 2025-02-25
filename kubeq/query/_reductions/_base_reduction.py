@@ -1,4 +1,5 @@
 from abc import ABC
+from re import S
 
 from kubeq.query._operators import *
 
