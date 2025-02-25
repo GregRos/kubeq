@@ -7,6 +7,13 @@
       "type": "debugpy",
       "module": "test",
       "justMyCode": false
+    },
+    {
+      "name": "test_operators",
+      "request": "launch",
+      "type": "debugpy",
+      "program": "test/operators.py",
+      "justMyCode": false
     }
   ]
 }

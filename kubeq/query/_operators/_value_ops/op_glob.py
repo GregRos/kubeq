@@ -15,3 +15,6 @@ class Glob(ValueOp[str], value_type=str):
 
     def normalize(self) -> "Regex":
         return Regex(fnmatch.translate(self.value), original=self)
+
+    def __repr__(self, /) -> str:
+        return f"glob({self.value})"

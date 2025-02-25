@@ -1,10 +1,10 @@
 from kubeq.query import *
 from kubeq.query._operators._op_base import Op
-from kubeq.query._reductions._base_reduction import BaseReducers
+from kubeq.query._reductions._base_reduction import BaseReducer
 from kubeq.query._reductions._minimizing_reduction import MinimizingReduction
 
 
-class To_Kube_Api_Supported(BaseReducers):
+class To_Kube_Api_Supported(BaseReducer):
     def __init__(self, attr: attrs.Any):
         self.attr = attr
         super().__init__()

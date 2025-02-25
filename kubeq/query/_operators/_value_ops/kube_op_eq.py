@@ -11,3 +11,6 @@ class Eq(ValueOp[str], value_type=str):
 
     def normalize(self) -> "In":
         return In({self.value}, original=self)
+
+    def __repr__(self, /) -> str:
+        return f"={self.value!r}"

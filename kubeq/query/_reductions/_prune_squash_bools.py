@@ -1,8 +1,8 @@
 from kubeq.query._operators import *
-from ._base_reduction import BaseReducers
+from ._base_reduction import BaseReducer
 
 
-class Prune_Squash_Bools(BaseReducers):
+class Prune_Squash_Bools(BaseReducer):
 
     def _prune_and(self, op: And):
         pruned = []

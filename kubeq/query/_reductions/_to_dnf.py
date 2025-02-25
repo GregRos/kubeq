@@ -1,11 +1,11 @@
 from itertools import product
 from typing import Iterable, override
 from kubeq.query._operators import *
-from kubeq.query._reductions._base_reduction import BaseReducers
+from kubeq.query._reductions._base_reduction import BaseReducer
 from kubeq.query._reductions._minimizing_reduction import MinimizingReduction
 
 
-class To_Messy_Dnf(BaseReducers):
+class To_Messy_Dnf(BaseReducer):
 
     def _pair_reduce(self, a: Or, b: Or):
         x = [And([x, y]) for x, y in product(a.operands, b.operands)]
@@ -45,7 +45,7 @@ def assert_dnf(s: Op):
 
 class Minimizing_Dnf(MinimizingReduction):
     @override
-    def make_reducer(self) -> BaseReducers:
+    def make_reducer(self) -> BaseReducer:
         return To_Messy_Dnf()
 
     @override

@@ -24,3 +24,9 @@ class Field:
 
     def __hash__(self) -> int:
         return hash(self.name)
+
+    def __str__(self) -> str:
+        return f"@{self.name}"
+
+    def __repr__(self) -> str:
+        return self.__str__()

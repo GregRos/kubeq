@@ -22,4 +22,4 @@ class Or(Bool):
         return any(op(what) for op in self.operands)
 
     def __repr__(self) -> str:
-        return collection_repr("", "|", self.operands)
+        return " | ".join(map(repr, self.operands))

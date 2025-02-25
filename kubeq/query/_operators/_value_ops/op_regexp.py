@@ -14,3 +14,6 @@ class Regex(ValueOp[str], value_type=str):
 
     def normalize(self) -> "Op":
         return self
+
+    def __repr__(self) -> str:
+        return repr(self.original) if self.original else f"regex({self.value})"

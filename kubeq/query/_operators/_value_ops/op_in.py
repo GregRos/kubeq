@@ -9,3 +9,6 @@ class In(MultiValueOp, value_type=set[str]):
 
     def __call__(self, what: str) -> bool:
         return what in self.value
+
+    def __repr__(self) -> str:
+        return f"in({",".join(self.value)})"

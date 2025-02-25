@@ -11,7 +11,6 @@ import aioreactive as rx
 
 from kubeq.logging import setup_logging
 from kubeq.query._attr.kind import Kind
-from kubeq.query_plan.decide import QueryDecider
 from kubeq.utils import rxq
 import pprint
 
@@ -44,15 +43,7 @@ def start():
         resources = KubeResourceDB(res)
         table = Table_RDB(resources)
         c.print(table)
-        qd = QueryDecider(resources, client)
-        select_pods = Kind("name").eq("Pod")
-        rx_results = qd.query(select_pods)
 
-        res2 = await rx.pipe(
-            rx_results,
-            rxq.to_list(),
-            rxq.run,
-        )
         c.print(res2)
 
     asyncio.run(do())

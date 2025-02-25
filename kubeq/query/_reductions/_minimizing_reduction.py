@@ -2,13 +2,13 @@ from abc import abstractmethod
 from typing import Callable
 from kubeq.query._utils.render_op import print_operator
 from kubeq.query._operators import *
-from ._base_reduction import BaseReducers, ComboReduction
+from ._base_reduction import BaseReducer, ComboReduction
 from ._squash_leaf_ops import Squash_Leaf_Ops
 from ._prune_squash_bools import Prune_Squash_Bools
 from ._nullary_terms_to_prims import Nullary_Terms_To_Prims
 
 
-class MinimizingReduction(BaseReducers):
+class MinimizingReduction(BaseReducer):
 
     def __init__(
         self,
@@ -19,7 +19,7 @@ class MinimizingReduction(BaseReducers):
         self.normalize_ops = normalize_ops
 
     @abstractmethod
-    def make_reducer(self) -> BaseReducers: ...
+    def make_reducer(self) -> BaseReducer: ...
 
     @abstractmethod
     def cleanup(self, op: Op) -> None: ...

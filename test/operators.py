@@ -17,3 +17,7 @@ def start():
     r = dnf.reduce(r)
 
     print(render_operator(r))
+    print(repr(r))
+
+
+start()
