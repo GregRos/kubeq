@@ -28,9 +28,6 @@ class Selector[A: _attr.Any = _attr.Any]:
     def or_(self, *ops: oprs.Op) -> Self:
         return self.__class__(self.attr, oprs.Or(self.operator, *ops))
 
-    def destructure_or(self) -> "Sequence[Selector[A]]":
-        match self.operator:
-            case oprs.Or(*ops):
-                return [self.__class__(self.attr, op) for op in ops]
-            case _:
-                return [self]
+
+type KindSelector = Selector[_attr.Kind]
+type InstanceSelector = Selector[_attr.Api]

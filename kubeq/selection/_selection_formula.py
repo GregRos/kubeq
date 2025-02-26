@@ -83,11 +83,6 @@ class SelectionFormula(Mapping[attr.Any, oprs.Op[Any]]):
         }
         return SelectionFormula(filtered)
 
-    def destructure_ors(self):
-        destructured = [selector.destructure_or() for selector in self.selectors]
-        prod = list(product(*destructured))
-        return [self.of_selectors(p) for p in prod]
-
 
 # -k verbs[has(delete) & !has(create)]
 # -s %Label[=12 & in(1, 2, 3) & glob(a/*) & regex(.*a.*)]
