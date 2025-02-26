@@ -5,7 +5,7 @@ kubeq -s [app]=thing
 gives pretty table of everythig with that label
 
 ```
-
+https://kubernetes.io/docs/concepts/cluster-administration/flow-control/
 
 kubeq [app=thing] -- EXEC
 kubeq [app=thing] -- PORT-FORWARD

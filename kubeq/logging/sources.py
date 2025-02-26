@@ -10,6 +10,6 @@ cli = _base_source.LogSource("kubeq.cli", "🖥️")
 r_db = _base_source.LogSource("kubeq.rdb", "📚")
 
 
-query_d = _base_source.LogSource("kubeq.query_decider", "🔍")
+driver = _base_source.LogSource("kubeq.driver", "🧭")
 cli.logger.debug("Logging initialized")
 del _base_source

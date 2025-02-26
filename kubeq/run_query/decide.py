@@ -16,7 +16,7 @@ from kubeq.query._attr.label import Label
 from kubeq.run_query._kube_reductions._to_kube_api_supported import (
     To_Min_Kube_Api_Supported,
 )
-from kubeq.run_query.op_to_str import selector_to_kube_api
+from kubeq.run_query.op_to_str import _selector_to_kube_api
 from ._kube_reductions import to_finite_set, To_Kube_Api_Supported
 
-logger = sources.query_d.logger
+logger = sources.driver.logger

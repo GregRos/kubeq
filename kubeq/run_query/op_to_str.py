@@ -1,6 +1,7 @@
 from typing import Iterable
 from kubeq.http._requests._helpers._kube_selector import (
     KubeBinSelector,
+    KubeSelector,
     KubeUnarySelector,
 )
 from kubeq.query import *
@@ -10,7 +11,7 @@ def _format_in_list(vals: Iterable[str]):
     return f"({",".join(vals)})"
 
 
-def selector_to_kube_api(attr: attrs.Any, op: oprs.Op):
+def _selector_to_kube_api(attr: attrs.Any, op: oprs.Op):
     match op:
         case oprs.In(values):
             return KubeBinSelector(attr.name, "in", _format_in_list(values))
@@ -26,3 +27,7 @@ def selector_to_kube_api(attr: attrs.Any, op: oprs.Op):
             return KubeUnarySelector(attr.name, "!")
         case _:
             raise ValueError(f"Kubernetes API does not support {op}")
+
+
+def formula_to_kube_api(formula: SelectionFormula) -> list[KubeSelector]:
+    return [_selector_to_kube_api(attr, op) for attr, op in formula]

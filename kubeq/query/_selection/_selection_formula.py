@@ -1,23 +1,39 @@
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 import kubeq.query._attr as attr
 import kubeq.query._operators as oprs
 from kubeq.query._reductions._base_reduction import BaseReducer
 
 
-class SelectionFormula:
+class SelectionFormula(Mapping[attr.Any, oprs.Op[Any]]):
     def __init__(self, selectors: Mapping[attr.Any, oprs.Op[Any]]):
         self.selectors = selectors
 
-    def reduce(self, r: BaseReducer):
-        result = {k: r.reduce(v) for k, v in self.selectors.items()}
-        # get rid of always clauses and reduce never clauses
-        for k, v in result.items():
-            match v:
-                case oprs.Always():
-                    del result[k]
-                case oprs.Never():
-                    return SelectionFormula({})
+    def __iter__(self):
+        return iter(self.selectors)
 
+    def set(self, attr: attr.Any, op: oprs.Op[Any]):
+        return SelectionFormula({**self.selectors, attr: op})
+
+    def __getitem__(self, key):
+        return self.selectors[key]
+
+    def __len__(self):
+        return len(self.selectors)
+
+    def __bool__(self):
+        return self.is_empty
+
+    def reduce(
+        self, make_reducer: Callable[[attr.Any], BaseReducer]
+    ) -> "SelectionFormula":
+        d = {}
+        for attr, op in self.selectors.items():
+            reducer = make_reducer(attr)
+            op = reducer.reduce(op)
+            d[attr] = op
+        return SelectionFormula(d)
+
+    @property
     def is_empty(self):
         return not self.selectors
 
