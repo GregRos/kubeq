@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from itertools import product
 from typing import Sequence
 from kubeq.entities._resource._resource import KubeResource
+from kubeq.run_query.kube_list_request import KubeListRequest
+from kubeq.run_query.op_to_str import formula_to_kube_api
 from kubeq.selection._selection_formula import SelectionFormula
 from kubeq.selection._selector import Selector
 import kubeq.query._operators as oprs
@@ -20,12 +22,20 @@ def _separate_formula(formula: SelectionFormula) -> Sequence[SelectionFormula]:
     return [SelectionFormula.of_selectors(part) for part in prod]
 
 
-@dataclass
 class QueryPlan:
     resources: Sequence[KubeResource]
     separated_formulas: Sequence[SelectionFormula]
 
-    @staticmethod
-    def from_(resources: Sequence[KubeResource], formula: SelectionFormula) -> "QueryPlan":
-        separated_formulas = _separate_formula(formula)
-        return QueryPlan(resources, separated_formulas)
+    def __init__(self, resources: Sequence[KubeResource], formula: SelectionFormula):
+        self.resources = resources
+        self.separated_formulas = _separate_formula(formula)
+    
+    @classmethod
+    def _new_request(cls, target: KubeResource, cf_formula: SelectionFormula):
+        labels = cf_formula.only_of(attr.Label)
+        fields = cf_formula.only_of(attr.Field)
+        labels_kube = formula_to_kube_api(labels)
+        fields_kube = formula_to_kube_api(fields)
+        return KubeListRequest(target, labels_kube, fields_kube)
+    
+    
