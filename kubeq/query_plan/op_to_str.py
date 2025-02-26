@@ -5,6 +5,7 @@ from kubeq.http._requests._helpers._kube_selector import (
     KubeUnarySelector,
 )
 from kubeq.query import *
+from kubeq.selection._selection_formula import SelectionFormula
 
 
 def _format_in_list(vals: Iterable[str]):
@@ -30,4 +31,4 @@ def _selector_to_kube_api(attr: attrs.Any, op: oprs.Op):
 
 
 def formula_to_kube_api(formula: SelectionFormula) -> list[KubeSelector]:
-    return [_selector_to_kube_api(attr, op) for attr, op in formula]
+    return [_selector_to_kube_api(attr, op) for attr, op in formula.items()]

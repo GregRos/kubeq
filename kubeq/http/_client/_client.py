@@ -37,6 +37,7 @@ class KubeClient:
                     "Accept": str(request.header_accept),
                 },
             )
+
             response = await self._api.send(
                 method=request.method,
                 url=str(url),

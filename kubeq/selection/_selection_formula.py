@@ -3,7 +3,6 @@ from typing import Any, Callable, Iterable, Mapping
 import kubeq.query._attr as attr
 import kubeq.query._operators as oprs
 from kubeq.query._reductions._base_reduction import BaseReducer
-from kubeq.selection._instance_selector import InstanceSelector
 from kubeq.selection._selector import Selector
 
 
@@ -13,6 +12,9 @@ class SelectionFormula(Mapping[attr.Any, oprs.Op[Any]]):
 
     def __iter__(self):
         return iter(self._formula)
+
+    def _call__(self, x: object):
+        return all(op(attr.get(x)) for attr, op in self._formula.items())
 
     @staticmethod
     def _make_selector(attrx: attr.Any, op: oprs.Op[Any]) -> Selector:
@@ -77,9 +79,19 @@ class SelectionFormula(Mapping[attr.Any, oprs.Op[Any]]):
     def __call__(self, x: object):
         return all(op(attr.get(x)) for attr, op in self._formula.items())
 
-    def only_of(self, t: type[attr.Any]):
+    def without(self, *t: type[attr.Any]):
         filtered = {
-            attr: op for attr, op in self._formula.items() if isinstance(attr, t)
+            attr: op
+            for attr, op in self._formula.items()
+            if all(not isinstance(attr, x) for x in t)
+        }
+        return SelectionFormula(filtered)
+
+    def only(self, *t: type[attr.Any]):
+        filtered = {
+            attr: op
+            for attr, op in self._formula.items()
+            if any(isinstance(attr, x) for x in t)
         }
         return SelectionFormula(filtered)
 

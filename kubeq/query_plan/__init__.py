@@ -1,2 +1,1 @@
-from ._kind_selector import KindSelector
-from ._selection_formula import SelectionFormula
+from ._query_plan import QueryPlan
