@@ -8,7 +8,7 @@ from kubeq.http._requests._helpers._kube_selector import splat
 from kubeq.logging import sources
 from kubeq.query._selection._selection_formula import SelectionFormula
 import kubeq.query._attr as attr
-from kubeq.run_query.op_to_str import _selector_to_kube_api, formula_to_kube_api
+from kubeq.query_plan.op_to_str import _selector_to_kube_api, formula_to_kube_api
 from kubeq.run_query.separate import separate_formula
 from ._kube_reductions import To_Min_Kube_Api_Supported
 import aioreactive as rx
