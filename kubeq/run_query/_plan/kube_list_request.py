@@ -1,7 +1,6 @@
 import kubeq.query._attr as attr
 from kubeq.entities._resource._resource import KubeResource
 from kubeq.http._requests._helpers._kube_selector import KubeSelector, splat
-from kubeq.query._selection._selection_formula import SelectionFormula
 from kubeq.run_query.op_to_str import formula_to_kube_api
 
 
@@ -23,7 +22,7 @@ class KubeListRequest:
         self._target = target
         self._labels = labels
         self._fields = fields
-    
+
     @property
     def kind(self):
         return self._target.kind.fqn

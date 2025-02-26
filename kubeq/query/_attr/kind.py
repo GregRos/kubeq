@@ -24,30 +24,6 @@ class Kind(BaseAttr):
     def __hash__(self) -> int:
         return hash("kind")
 
-    def eq(self, value: str):
-        from kubeq.query._operators import Eq
-        from kubeq.query._selection import KindSelector
-
-        return KindSelector(self, Eq(value))
-
-    def in_(self, *values: str):
-        from kubeq.query._operators import In
-        from kubeq.query._selection import KindSelector
-
-        return KindSelector(self, In(*values))
-
-    def not_eq(self, value: str):
-        from kubeq.query._operators import NotEq
-        from kubeq.query._selection import KindSelector
-
-        return KindSelector(self, NotEq(value))
-
-    def not_in(self, *values: str):
-        from kubeq.query._operators import NotIn
-        from kubeq.query._selection import KindSelector
-
-        return KindSelector(self, NotIn(*values))
-
     def __str__(self) -> str:
         return self.name
 

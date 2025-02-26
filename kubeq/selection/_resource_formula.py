@@ -1,8 +1,8 @@
 from typing import Mapping
 from kubeq.entities._resource._resource import KubeResource
-from kubeq.query._selection._selection_formula import SelectionFormula
 import kubeq.query._attr as attr
 import kubeq.query._operators as oprs
+from kubeq.selection._selection_formula import SelectionFormula
 
 
 class ResourceFormula(SelectionFormula):
