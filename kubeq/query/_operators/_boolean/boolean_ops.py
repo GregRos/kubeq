@@ -4,16 +4,16 @@ from typing import TYPE_CHECKING, Any, Iterable, Self, overload
 from kubeq.query._operators._op_base import Op
 
 
-class Bool(Op, ABC):
+class Bool[T](Op[T], ABC):
     __match_args__ = ("operands",)
 
-    operands: list[Op]
+    operands: list[Op[T]]
 
     @overload
-    def __init__(self, *operators: Op) -> None: ...
+    def __init__(self, *operators: Op[T]) -> None: ...
 
     @overload
-    def __init__(self, operators: Iterable[Op], /) -> None: ...
+    def __init__(self, operators: Iterable[Op[T]], /) -> None: ...
 
     def __init__(self, *args: Any) -> None:
         match list(args):
@@ -37,5 +37,5 @@ class Bool(Op, ABC):
     def __hash__(self) -> int:
         return hash(frozenset(self.operands))
 
-    def normalize(self) -> Op:
+    def normalize(self) -> Op[T]:
         return self

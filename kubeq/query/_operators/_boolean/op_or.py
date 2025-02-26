@@ -8,7 +8,7 @@ from kubeq.query._operators._op_base import Op
 from typing import Callable, Iterable, Self
 
 
-class Or(Bool):
+class Or[T](Bool[T]):
 
     @classmethod
     def of(cls, *operators: Op) -> "Or":
@@ -18,7 +18,7 @@ class Or(Bool):
             case _:
                 return Or(operators)
 
-    def __call__(self, what: str) -> bool:
+    def __call__(self, what: T) -> bool:
         return any(op(what) for op in self.operands)
 
     def __repr__(self) -> str:

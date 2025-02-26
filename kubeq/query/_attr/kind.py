@@ -14,7 +14,8 @@ class Kind(BaseAttr):
     __match_args__ = ("name",)
     name: str
 
-    def get(self, object: KubeResource) -> str:
+    def get(self, object: object) -> str:
+        assert isinstance(object, KubeResource), f"Expected KubeResource, got {object}"
         return getattr(object, self.name)
 
     def __eq__(self, other: object) -> bool:
@@ -46,3 +47,9 @@ class Kind(BaseAttr):
         from kubeq.query._selection import KindSelector
 
         return KindSelector(self, NotIn(*values))
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        return self.__str__()

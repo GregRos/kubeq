@@ -42,7 +42,7 @@ class To_Kube_Api_Supported(BaseReducer):
                 return r
 
 
-class Min_To_Kube_Api_Supported(MinimizingReduction):
+class To_Min_Kube_Api_Supported(MinimizingReduction):
     def __init__(self, attr: attrs.Any):
         self.attr = attr
         super().__init__(normalize_ops=False)

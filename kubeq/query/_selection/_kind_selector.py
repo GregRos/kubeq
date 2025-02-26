@@ -18,4 +18,4 @@ class KindSelector:
         return self.operator(self.attr.get(object))
 
     def __repr__(self) -> str:
-        return f"[{self.operator}]"
+        return f"{self.attr}[{repr(self.operator)}]"

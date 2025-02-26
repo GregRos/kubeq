@@ -6,17 +6,17 @@ from kubeq.query._operators._op_base import Op
 from typing import Callable, Iterable
 
 
-class And(Bool):
+class And[T](Bool[T]):
 
     @classmethod
-    def of(cls, *operators: Op) -> "And":
+    def of(cls, *operators: Op[T]) -> "And":
         match operators:
             case (And() as r,):
                 return r
             case _:
                 return And(operators)
 
-    def __call__(self, what: str) -> bool:
+    def __call__(self, what: T) -> bool:
         return all(op(what) for op in self.operands)
 
     def __repr__(self) -> str:

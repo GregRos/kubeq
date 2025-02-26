@@ -3,6 +3,7 @@ from typing import Iterable, overload
 from kubeq.entities._resource._sub_resource import KubeSubResource
 from kubeq.entities._resource._resource import KubeResource
 from kubeq.logging import sources
+import kubeq.query._operators as oprs
 
 init_count = 0
 logger = sources.r_db.logger

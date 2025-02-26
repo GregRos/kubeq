@@ -5,11 +5,13 @@ from kubeq.query._operators._value_ops.op_value import ValueOp
 from kubeq.query._operators._value_ops.repr_collection import repr_collection
 
 
-class MultiValueOp(ValueOp[set[str]], value_type=set[str]):
+class MultiValueOp[T = str](ValueOp[set[T], T], value_type=set[T]):
     @overload
     def __init__(self, *values: str) -> None: ...
+
     @overload
     def __init__(self, value: set[str], *, original: "Op | None" = None) -> None: ...
+
     def __init__(self, *rest, **kwargs) -> None:
         if len(rest) == 1:
             super().__init__(rest[0], **kwargs)
@@ -22,5 +24,5 @@ class MultiValueOp(ValueOp[set[str]], value_type=set[str]):
     def __hash__(self) -> int:
         return hash(frozenset(self.value))
 
-    def normalize(self) -> Op:
+    def normalize(self) -> Op[T]:
         return self
