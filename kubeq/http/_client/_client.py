@@ -30,13 +30,6 @@ class KubeClient:
             headers = request.headers()
             headers.update({"User-Agent": self._header_user_agent()})
             log_url = f"/{url.path}"
-            logger.info(
-                f"Making k8s API request {str(request)}",
-                {
-                    "Endpoint": f"{request.method} {log_url}",
-                    "Accept": str(request.header_accept),
-                },
-            )
 
             response = await self._api.send(
                 method=request.method,
@@ -45,13 +38,21 @@ class KubeClient:
                 payload=request._payload(),
             )
             logger.info(
-                f"Received response {request.method} {log_url}",
+                f"Received response to {str(request)}",
                 {
-                    "Accept": str(request.header_accept),
+                    "endpoint": f"{request.method} {log_url}",
+                    "accept": str(request.header_accept),
                 },
             )
             await self._cache.store(request, response)
-
+        else:
+            logger.info(
+                f"Cache hit for {str(request)}",
+                {
+                    "endpoint": f"{request.method} /{request.url}",
+                    "accept": str(request.header_accept),
+                },
+            )
         return response
 
     def send[V](self, request: KubeRequest[V]) -> V:

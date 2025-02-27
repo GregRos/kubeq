@@ -34,7 +34,7 @@ class KubeResourceDB:
             self._by_name[x.fqn] = x
             self._list.append(x)
             loaded_count += 1
-            if loaded_count % 10 == 0:
+            if loaded_count % 50 == 0:
                 logger.debug(f"... Loading {x.id} ... [{loaded_count}/{len(loaded)}]")
 
     @overload

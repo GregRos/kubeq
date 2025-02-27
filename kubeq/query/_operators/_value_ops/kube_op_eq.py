@@ -13,4 +13,4 @@ class Eq(ValueOp[str], value_type=str):
         return In({self.value}, original=self)
 
     def __repr__(self, /) -> str:
-        return f"={self.value!r}"
+        return f"={self.value}"

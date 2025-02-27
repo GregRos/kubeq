@@ -61,8 +61,8 @@ class Squash_Leaf_Ops(BaseReducer):
 
     def _reduce_pair_or(self, a: Op, b: Op) -> tuple[Op, Op]:
         self.increment()
-        a = a.normalize()
-        b = b.normalize()
+        a = a.normalize() if self.normalize_operators else a
+        b = b.normalize() if self.normalize_operators else b
         match a, b:
             # MISSING | NOTIN -> NOTIN
             # MISSING | NOTREGEX -> NOTREGEX

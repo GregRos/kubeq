@@ -21,8 +21,23 @@ class KubeResource(KubeResourceBase):
     kids: Mapping[str, "KubeSubResource"] = field(default_factory=dict, repr=False)
 
     @property
+    def version(self):
+        return self.kind.version
+
+    @property
     def classify(self):
         return self.kind.classify
+
+    def __format__(self, format_spec: str) -> str:
+        match format_spec:
+            case "short":
+                return self.ident
+            case "fqn":
+                return self.fqn
+            case "full":
+                return super().__str__()
+            case _:
+                return super().__format__(format_spec)
 
     @property
     def ident(self):
@@ -40,7 +55,11 @@ class KubeResource(KubeResourceBase):
         return self.kids[item]
 
     def list_uri(self):
+
         return self.kind.base_uri + (self.names.plural,)
 
     def get_uri(self, name: str):
         return self.list_uri() + (name,)
+
+    def __str__(self):
+        return self.fqn

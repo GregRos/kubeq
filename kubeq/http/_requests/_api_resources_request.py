@@ -30,9 +30,7 @@ _v2_subclause = AcceptSubclause(
 
 _v2_beta_subclause = _v2_subclause.with_(version="v2beta1")
 
-_accept_for_discovery = AcceptHeader(
-    "application/json", _v2_subclause, _v2_beta_subclause
-)
+_accept_for_discovery = AcceptHeader(_v2_subclause, _v2_beta_subclause)
 
 
 class KubeDiscoveryRequest(KubeRxRequest[KubeResource]):

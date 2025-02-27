@@ -22,7 +22,7 @@ class To_Kube_Api_Supported(BaseReducer):
                 return oprs.Or([oprs.Eq(kid) for kid in kids])
             case _, oprs.NotIn(kids):
                 self.increment()
-                return oprs.Or([oprs.Eq(kid) for kid in kids])
+                return oprs.And([oprs.NotEq(kid) for kid in kids])
             case (
                 _,
                 oprs.Regex()

@@ -35,23 +35,19 @@ class KubeListRequest(KubeRxRequest):
 
     def _url_path(self):
         parts = self.what.list_uri()
-        if self.namespace:
-            assert self.what.is_cluster, "Resource is not namespaced!"
-            parts += ("namespaces", self.namespace)
 
-        parts += (self.what.names.plural,)
         return parts
 
     def _url_query(self):
-        return QueryParams(
-            {
-                "labelSelector": splat(self.label_selectors),
-                "fieldSelector": splat(self.field_selectors),
-            }
-        )
+        qp = QueryParams()
+        if self.label_selectors:
+            qp = qp.set("labelSelector", splat(self.label_selectors))
+        if self.field_selectors:
+            qp = qp.set("fieldSelector", splat(self.field_selectors))
+        return qp
 
     def _parse_json_object(self, body: Box) -> AsyncObservable[Box]:
-        return rx.single(body)
+        return rx.from_iterable(body["items"])
 
     @property
     @override

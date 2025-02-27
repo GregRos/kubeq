@@ -95,6 +95,12 @@ class SelectionFormula(Mapping[attr.Any, oprs.Op[Any]]):
         }
         return SelectionFormula(filtered)
 
+    def to_visual_dict(self):
+        d = {}
+        for at, op in self._formula.items():
+            d[str(at).replace("@", "^1").replace("%", "^2")] = str(op)
+        return d
+
 
 # -k verbs[has(delete) & !has(create)]
 # -s %Label[=12 & in(1, 2, 3) & glob(a/*) & regex(.*a.*)]

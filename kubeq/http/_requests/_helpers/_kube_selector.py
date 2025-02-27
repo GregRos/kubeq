@@ -9,7 +9,7 @@ class KubeBinSelector:
     value: str
 
     def __str__(self):
-        return f"{self.name} {self.operator} {self.value}"
+        return f"{self.name}{self.operator}{self.value}"
 
 
 @dataclass

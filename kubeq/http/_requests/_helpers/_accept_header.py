@@ -30,19 +30,17 @@ class AcceptSubclause:
         )
 
     def __str__(self):
-        as_with_mime = f"{self.as_},{self.content_type}"
-        pairs = [("g", self.group), ("v", self.version), ("as", as_with_mime)]
-        return _from_sections([_format_kvp(k, v) for k, v in pairs])
+        pairs = [("g", self.group), ("v", self.version), ("as", self.as_)]
+        kvps = [_format_kvp(k, v) for k, v in pairs]
+        return _from_sections([self.content_type, *kvps])
 
 
 class AcceptHeader:
-    content_type: str
     subclauses: tuple[AcceptSubclause, ...]
 
-    def __init__(self, content_type: str, *subclause: AcceptSubclause):
-        self.content_type = content_type
+    def __init__(self, *subclause: AcceptSubclause):
         self.subclauses = subclause
 
     def __str__(self):
-        sections = _from_sections(self.content_type, *[str(s) for s in self.subclauses])
+        sections = ",".join([str(s) for s in self.subclauses])
         return sections

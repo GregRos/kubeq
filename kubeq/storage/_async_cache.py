@@ -64,17 +64,18 @@ class AsyncCache:
             entry: CacheEntry | None = cache.get(info.key)  # type: ignore
             if entry:
                 logger.debug(
-                    f"HIT: {str(info)}",
+                    f"Serving from cache",
                     {
+                        "key": str(info.key),
                         "value": str(entry.value),
                     },
                 )
                 return entry.value
             else:
                 logger.debug(
-                    f"MISS: {str(info)}",
+                    f"Cache miss",
                     {
-                        "value": None,
+                        "key": str(info.key),
                     },
                 )
                 return None

@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from itertools import product
-from typing import Sequence
+from typing import Iterable, Sequence
 from kubeq.entities._resource._resource import KubeResource
-from kubeq.query_plan._make_request import create_request
-from kubeq.query_plan._separate import separate_formula
-from kubeq.query_plan.op_to_str import formula_to_kube_api
+from kubeq.request_plan._make_request import create_request
+from kubeq.request_plan._separate import separate_formula
+from kubeq.request_plan.op_to_str import formula_to_kube_api
 from kubeq.selection._selection_formula import SelectionFormula
 from kubeq.selection._selector import Selector
 import kubeq.query._operators as oprs
@@ -13,12 +13,29 @@ import kubeq.query._attr as attr
 
 @dataclass
 class QpStats:
-    count_resources: int
-    count_subqeries: int
-    total_requests: int
+    resources: int
+    subqueries: int
+    requests: int
+
+    def to_dict(self):
+        return {
+            "resources": self.resources,
+            "subqueries": self.subqueries,
+            "requests": self.requests,
+        }
 
 
-class QueryPlan:
+def trunc(input: Iterable[str], limit: int = 3):
+    parts = []
+    for i, x in enumerate(input):
+        parts.append(x)
+        if i >= limit:
+            parts.append("...")
+            break
+    return ", ".join(parts)
+
+
+class RequestPlan:
     resources: Sequence[KubeResource]
     separated_formulas: Sequence[SelectionFormula]
 
@@ -29,9 +46,9 @@ class QueryPlan:
     @property
     def stats(self):
         return QpStats(
-            count_resources=len(self.resources),
-            count_subqeries=len(self.separated_formulas),
-            total_requests=len(self.resources) * len(self.separated_formulas),
+            resources=len(self.resources),
+            subqueries=len(self.separated_formulas),
+            requests=len(self.resources) * len(self.separated_formulas),
         )
 
     def to_requests(self):
@@ -39,6 +56,15 @@ class QueryPlan:
             create_request(res, formula)
             for res, formula in product(self.resources, self.separated_formulas)
         ]
+
+    def to_dict_desc(self):
+        viz_resources = trunc([f"{x:short}" for x in self.resources], 3)
+        subqueries = [x.to_visual_dict() for x in self.separated_formulas]
+        return {
+            "resources": viz_resources,
+            "subqueries": subqueries,
+            "stats": self.stats.to_dict(),
+        }
 
 
 """

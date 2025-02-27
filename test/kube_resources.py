@@ -44,6 +44,4 @@ def start():
         table = Table_RDB(resources)
         c.print(table)
 
-        c.print(res2)
-
     asyncio.run(do())

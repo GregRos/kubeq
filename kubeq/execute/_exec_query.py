@@ -6,15 +6,18 @@ from kubeq.entities._db import KubeResourceDB
 from kubeq.execute._construct_rdb import construct_rdb
 from kubeq.http._client._client import KubeClient
 from kubeq.query._attr.kind import Kind
-from kubeq.query_plan._kube_reductions._to_kube_api_supported import (
+from kubeq.request_plan._kube_reductions._to_kube_api_supported import (
     To_Min_Kube_Api_Supported,
 )
-from kubeq.query_plan._query_plan import QueryPlan
+from kubeq.request_plan._request_plan import RequestPlan
+from kubeq.request_plan._visualize import visualize
 from kubeq.selection import Selector
 from kubeq.selection._selection_formula import SelectionFormula
 import aioreactive as rx
-
+from rich.console import Console
 from kubeq.utils import rxq
+
+c = Console()
 
 
 @dataclass
@@ -31,8 +34,9 @@ class QueryExecution:
             lambda x: To_Min_Kube_Api_Supported(x)
         )
         affected = filter(kind_selectors, rdb.resources)
+        query_plan = RequestPlan(list(affected), only_kube_supported)
+        visualize(query_plan)
 
-        query_plan = QueryPlan(list(affected), only_kube_supported)
         reqs = query_plan.to_requests()
         return await rx.pipe(
             rx.from_iterable(reqs),
@@ -40,4 +44,4 @@ class QueryExecution:
             rx.filter(labels_and_fields),
             rxq.to_list(),
             rxq.run,
-        )
+        )  # type: ignore

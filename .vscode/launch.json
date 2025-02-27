@@ -14,6 +14,13 @@
       "type": "debugpy",
       "program": "test/operators.py",
       "justMyCode": false
+    },
+    {
+      "name": "exec",
+      "request": "launch",
+      "type": "debugpy",
+      "program": "test/request_plan.py",
+      "justMyCode": false
     }
   ]
 }

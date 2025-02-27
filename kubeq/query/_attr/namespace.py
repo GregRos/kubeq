@@ -4,31 +4,27 @@ from kr8s.objects import APIObject
 
 from dataclasses import dataclass
 
-from kubeq.query._utils.get_path import get_path
-
 
 @dataclass
-class Field:
-    __match_args__ = ("name",)
-    name: str
+class Namespace:
 
     def get(self, object: object) -> str:
         match object:
             case APIObject() as o:
-                return get_path(o.raw, self.name)
+                return o.raw["metadata"]["namespace"]
             case Box(d):
-                return get_path(d, self.name)
+                return d["metadata"]["namespace"]
             case _:
-                raise TypeError(f"Object {object} does not have kind")
+                raise TypeError(f"Object {object} does not have namespace")
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, Field) and self.name == other.name
+        return isinstance(other, Namespace)
 
     def __hash__(self) -> int:
-        return hash(self.name)
+        return hash(Namespace)
 
     def __str__(self) -> str:
-        return f"@{self.name}"
+        return "namespace"
 
     def __repr__(self) -> str:
         return self.__str__()
