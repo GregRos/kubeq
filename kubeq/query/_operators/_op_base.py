@@ -28,3 +28,9 @@ class Op[T = str](ABC):
         from kubeq.query._operators._boolean.op_or import Or
 
         return Or([self, *others])
+
+    def __and__(self, other: "Op[T]") -> "Op[T]":
+        return self.and_(other)
+
+    def __or__(self, other: "Op[T]") -> "Op[T]":
+        return self.or_(other)

@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from kr8s import api
-from kubeq.execute._exec_query import QueryExecution
+from kubeq.execute._exec_query import KubeQ
 from kubeq.http._client._client import KubeClient
 from kubeq.logging._setup_logging import setup_logging
 from kubeq.query._attr.field import Field
@@ -12,19 +12,20 @@ from kubeq.query import *
 from kubeq.selection._selection_formula import SelectionFormula
 
 setup_logging(minLevel=logging.DEBUG)
+import aioreactive as rx
 
 
 async def start():
     client = KubeClient(api(context="minikube"))
     formula = SelectionFormula(
         {
-            Kind("version"): Eq("v1"),
+            Kind("version"): Eq("v1") | Eq("v2"),
             Kind("ident"): Glob("P*"),
             Field("metadata.namespace"): In("default", "kube-system"),
-        }+
+        }
     )
-    exec = QueryExecution(client, formula)
-    results = await exec.run()
+    exec = KubeQ(client, formula)
+    results = await exec.query()
     for r in results:
         print(f"- {r.metadata.name}")
 
