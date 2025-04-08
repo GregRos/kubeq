@@ -24,8 +24,8 @@ async def start():
             Field("metadata.namespace"): In("default", "kube-system"),
         }
     )
-    exec = KubeQ(client, formula)
-    results = await exec.query()
+    exec = KubeQ(client)
+    results = await exec.query(formula)
     for r in results:
         print(f"- {r.metadata.name}")
 

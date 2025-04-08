@@ -6,6 +6,10 @@ from typing import Any, AsyncIterable, Awaitable, Iterable, Mapping, Unpack
 from box import Box
 from httpx import URL, QueryParams, Response
 
+from kubeq.http._requests._helpers._accept_header import (
+    BasicSubclause,
+    ComplexSubclause,
+)
 from kubeq.storage._info import CacheInfo
 from kubeq.storage._features import CacheFeatures
 
@@ -31,7 +35,9 @@ class KubeRequest[T](ABC):
 
     @property
     def header_accept(self) -> AcceptHeader:
-        return AcceptHeader("application/json")
+        return AcceptHeader(
+            BasicSubclause("application/json"),
+        )
 
     def headers(self) -> dict[str, str]:
         return {

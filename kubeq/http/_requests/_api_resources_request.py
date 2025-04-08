@@ -12,7 +12,7 @@ from kubeq.http._requests._helpers._parse_stuff import ResourceCtx
 from kubeq.http._requests._rx_request import KubeRxRequest
 from kubeq.storage._features import CacheFeatures
 from ._helpers import (
-    AcceptSubclause,
+    ComplexSubclause,
     AcceptHeader,
     parse_names,
     parse_kind,
@@ -21,7 +21,7 @@ from ._helpers import (
 from ._base_request import KubeRequest
 import aioreactive as rx
 
-_v2_subclause = AcceptSubclause(
+_v2_subclause = ComplexSubclause(
     version="v2",
     group="apidiscovery.k8s.io",
     as_="APIGroupDiscoveryList",

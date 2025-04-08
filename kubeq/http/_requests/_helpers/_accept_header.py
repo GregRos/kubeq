@@ -8,7 +8,7 @@ from ._format import _from_sections, _format_kvp
 
 
 @dataclass
-class AcceptSubclause:
+class ComplexSubclause:
     version: str
     group: str
     as_: str
@@ -22,7 +22,7 @@ class AcceptSubclause:
         group: str | None = None,
         version: str | None = None,
     ):
-        return AcceptSubclause(
+        return ComplexSubclause(
             version=version or self.version,
             group=group or self.group,
             as_=as_ or self.as_,
@@ -35,11 +35,24 @@ class AcceptSubclause:
         return _from_sections([self.content_type, *kvps])
 
 
-class AcceptHeader:
-    subclauses: tuple[AcceptSubclause, ...]
+class BasicSubclause:
+    content_type: str
 
-    def __init__(self, *subclause: AcceptSubclause):
-        self.subclauses = subclause
+    def __init__(self, content_type: str):
+        self.content_type = content_type
+
+    def __str__(self):
+        return self.content_type
+
+
+type Subclause = ComplexSubclause | BasicSubclause
+
+
+class AcceptHeader:
+    subclauses: tuple[Subclause, ...]
+
+    def __init__(self, *subclauses: Subclause):
+        self.subclauses = subclauses
 
     def __str__(self):
         sections = ",".join([str(s) for s in self.subclauses])

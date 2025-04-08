@@ -10,7 +10,11 @@ from httpx import QueryParams, URL
 
 from kubeq.http._requests._base_request import KubeRequest
 from kubeq.http._requests._rx_request import KubeRxRequest
-from kubeq.http._requests._helpers._accept_header import AcceptHeader
+from kubeq.http._requests._helpers._accept_header import (
+    AcceptHeader,
+    BasicSubclause,
+    ComplexSubclause,
+)
 from kubeq.http._requests._helpers import KubeBinSelector, KubeSelector, splat
 from kubeq.storage._features import CacheFeatures
 import aioreactive as rx
@@ -52,4 +56,4 @@ class KubeListRequest(KubeRxRequest):
     @property
     @override
     def header_accept(self):
-        return AcceptHeader("application/json")
+        return AcceptHeader(BasicSubclause("application/json"))
