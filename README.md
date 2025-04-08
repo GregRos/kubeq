@@ -169,11 +169,22 @@ There are two fairly primitive mechanisms.
 The default limits are 100 requests and 500 resources seen. They can be configured using:
 
 ```
---max-resources 1000
---max-requests 500
+--max-resources 500
+--max-requests 100
 ```
 
 If your query exceeds the values, partial results will still be retrieved, with a message that further data might be available.
+
+Besides these hard limits, there are extra mechanisms that affect query performance.
+
+```
+--reqs-per-minute 20
+--reqs-parallel 5
+```
+
+These change number of requests per minute (completed or inflight) and number of parallel inflight requests.
+
+
 # Why is this?
 kubeq is an irresponsibly powerful tool for querying your k8s cluster. It arose from the need to answer one simple question:
 
